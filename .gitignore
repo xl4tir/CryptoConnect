@@ -1,0 +1,8 @@
+node_modules/
+.env
+contract.js
+hardhat.config.js
+artifacts/
+cache/
+test/
+cryptrade swap/
