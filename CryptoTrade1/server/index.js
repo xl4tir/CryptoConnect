@@ -8,6 +8,7 @@ const authRoutes = require("./routes/authh");
 const profileRoutes = require("./routes/profile");
 const portfolioRoutes = require('./routes/portfolio');
 const transactionRoutes = require('./routes/transaction');
+const authEthersRoutes = require('./routes/authEthers');
 
 
 //database connection
@@ -24,6 +25,8 @@ app.use("/api/profile", profileRoutes);
 app.use("/api/auth", authRoutes);
 app.use('/api/portfolios', portfolioRoutes);
 app.use('/api/transactions', transactionRoutes);
+
+app.use("/api/testlogin", authEthersRoutes);
 
 
 const port = process.env.PORT || 8060;

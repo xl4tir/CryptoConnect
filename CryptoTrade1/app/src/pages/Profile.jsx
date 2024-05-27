@@ -1,6 +1,6 @@
 import Navbar from "../components/Base/Navbar";
 import Footer from "../components/Base/Footer";
-import Profile from "../components/Profile";
+import Profile from "../components/Profile/Profile";
 import React from 'react';
 
 

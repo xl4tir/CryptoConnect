@@ -8,12 +8,15 @@ import PublicationPage from './pages/PublicationPage';
 import PortfolioTrackerPage from './pages/PortfolioTrackerPage';
 import React from 'react';
 import SwapPage from "./pages/SwapPage";
+import TestAuth from "./pages/TestAuth"
 
 
 const App = () => (
 
     <Router>
       <Routes>
+
+          <Route path="/testauth" element={<TestAuth />} exact />
         
           <Route path="/sendTo" element={<SendToPage />} exact />
           <Route path="/swap" element={<SwapPage />} exact />
