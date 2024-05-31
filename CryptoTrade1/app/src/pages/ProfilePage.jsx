@@ -4,10 +4,10 @@ import Profile from "../components/Profile/Profile";
 import React from 'react';
 
 
-const SendToPage = () => (
+const ProfilePage = () => (
 
-  <div className="min-h-screen">
-    <div className="gradient-bg-main">
+  <div className="min-h-screen flex flex-col">
+    <div className="gradient-bg-main flex-grow">
       <Navbar />
       <Profile />
     </div>
@@ -15,4 +15,4 @@ const SendToPage = () => (
   </div>
 );
 
-export default SendToPage;
+export default ProfilePage;

@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const app = express();
 const cors = require('cors');
@@ -34,6 +35,8 @@ app.use(session({
 
 app.use("/api/testlogin", authEthersRoutes);
 app.use('/api/user', userProfileRoutes);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 //database connection
 connection();

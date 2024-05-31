@@ -5,10 +5,10 @@ import latestPublications from '../data/publications';
 import ReactModal from 'react-modal';
 import { Picker } from 'emoji-mart';
 import { useNavigate } from 'react-router-dom';
-import { fetchUserProfile, useFetchProfileEffect } from '../services/userProfileService';
+
 
 const Profile = () => {
-  const [userProfile, setUserProfile] = useState(null);
+  const [userProfile, setUserProfile] = useState("xl4tir");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPublication, setSelectedPublication] = useState(null);
   const [comment, setComment] = useState('');
@@ -37,12 +37,7 @@ const Profile = () => {
     closeModal(); // Закриття модального вікна після відправлення коментаря
   };
 
-  useFetchProfileEffect(setUserProfile);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    window.location.reload();
-  };
 
   return (
     <div className="flex w-full justify-center items-center">
@@ -75,13 +70,13 @@ const Profile = () => {
             </div>
 
             <nav className="h-32 flex justify-between flex-col">
-              <button className="text-white bg-transparent py-1 px-7 rounded-full border border-[#2952e3] cursor-pointer hover:bg-[#2952e3] hover:text-white" onClick={handleLogout}>
+              <button className="text-white bg-transparent py-1 px-7 rounded-full border border-[#2952e3] cursor-pointer hover:bg-[#2952e3] hover:text-white" >
                 Edit
               </button>
               <button className="text-white bg-transparent py-1 px-7 rounded-full border border-[#A90E8F] cursor-pointer hover:bg-[#A90E8F] hover:text-white" onClick={handleNavigatePortfolio}>
                 Portfolio
               </button>
-              <button className="text-white bg-transparent py-1 px-7 rounded-full border border-[#FF0000] cursor-pointer hover:bg-[#FF0000] hover:text-white" onClick={handleLogout}>
+              <button className="text-white bg-transparent py-1 px-7 rounded-full border border-[#FF0000] cursor-pointer hover:bg-[#FF0000] hover:text-white" >
                 Logout
               </button>
             </nav>
@@ -100,7 +95,7 @@ const Profile = () => {
             </div>
 
             {latestPublications
-              .filter((publication) => publication.author === userProfile.login) // Зміна тут
+              .filter((publication) => publication.author === "xl4tir") // Зміна тут
               .map((publication, index) => (
                 <div key={index} className="flex items-start flex-col">
                   <div className="flex flex-row w-full">

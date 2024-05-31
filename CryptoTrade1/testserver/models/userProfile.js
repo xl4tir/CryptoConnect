@@ -12,6 +12,8 @@ const userProfileSchema = new mongoose.Schema({
   bio: { type: String },
   favoriteCategories: [{ type: String }],
   registrationDate: { type: Date, default: Date.now },
+  profilePhoto: { type: String },
+  backgroundPhoto: { type: String } 
 });
 
 const UserProfile = mongoose.model('UserProfile', userProfileSchema);
