@@ -8,12 +8,12 @@ const api = axios.create({
   withCredentials: true,
 });
 
-export const fetchUserProfile = async (userAddress) => {
+export const fetchUserProfile = async (userId) => {
   try {
-    const response = await api.get(`/profile/${userAddress}`);
+    const response = await api.get(`/profile/${userId}`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching user profile:', error);
+    console.error('Помилка отримання профілю користувача:', error);
     throw error;
   }
 };
@@ -31,60 +31,60 @@ export const createUserProfile = async (profileData) => {
     const response = await api.post('/profile', profileData);
     return response.data;
   } catch (error) {
-    console.error('Error creating user profile:', error);
+    console.error('Помилка створення профілю користувача:', error);
     throw error;
   }
 };
 
-export const updateUserProfile = async (userAddress, profileData) => {
+export const updateUserProfile = async (userId, profileData) => {
   try {
-    const response = await api.put(`/profile/${userAddress}`, profileData);
+    const response = await api.put(`/profile/${userId}`, profileData);
     return response.data;
   } catch (error) {
-    console.error('Error updating user profile:', error);
+    console.error('Помилка оновлення профілю користувача:', error);
     throw error;
   }
 };
 
-export const deleteUserProfile = async (userAddress) => {
+export const deleteUserProfile = async (userId) => {
   try {
-    await api.delete(`/profile/${userAddress}`);
+    await api.delete(`/profile/${userId}`);
   } catch (error) {
-    console.error('Error deleting user profile:', error);
+    console.error('Помилка видалення профілю користувача:', error);
     throw error;
   }
 };
 
-export const uploadProfilePhoto = async (userAddress, photo) => {
+export const uploadProfilePhoto = async (userId, photo) => {
   try {
       const formData = new FormData();
       formData.append('photo', photo);
-      console.log(photo)
-      const response = await api.post(`/profile/photo/${userAddress}`, formData, {
+
+      const response = await api.post(`/profile/photo/${userId}`, formData, {
           headers: {
               'Content-Type': 'multipart/form-data',
           },
       });
       return response.data;
   } catch (error) {
-      console.error('Error uploading profile photo:', error);
+      console.error('Помилка завантаження фотографії профілю:', error);
       throw error;
   }
 };
 
-export const uploadBackgroundPhoto = async (userAddress, background) => {
+export const uploadBackgroundPhoto = async (userId, background) => {
   try {
       const formData = new FormData();
       formData.append('background', background);
 
-      const response = await api.post(`/profile/background/${userAddress}`, formData, {
+      const response = await api.post(`/profile/background/${userId}`, formData, {
           headers: {
               'Content-Type': 'multipart/form-data',
           },
       });
       return response.data;
   } catch (error) {
-      console.error('Error uploading background photo:', error);
+      console.error('Помилка завантаження фонового зображення:', error);
       throw error;
   }
 };

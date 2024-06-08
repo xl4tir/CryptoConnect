@@ -8,6 +8,11 @@ const authEthersRoutes = require('./routes/authEthers');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const userProfileRoutes = require('./routes/userProfileRoutes');
+const postRoutes = require('./routes/postRoutes');
+const commentRoutes = require('./routes/CommentRoutes');
+const reactionRoutes = require('./routes/reactionRoutes');
+const portfolioRoutes = require('./routes/portfolioRoutes');
+const transactionRoutes = require('./routes/transactionRoutes');
 
 app.use(express.json());
 app.use(cors({
@@ -36,7 +41,11 @@ app.use(session({
 app.use("/api/testlogin", authEthersRoutes);
 app.use('/api/user', userProfileRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
+app.use('/api/posts', postRoutes);
+app.use('/api/comments', commentRoutes);
+app.use('/reactions', reactionRoutes);
+app.use('/api/portfolios', portfolioRoutes);
+app.use('/api/transactions', transactionRoutes);
 
 //database connection
 connection();

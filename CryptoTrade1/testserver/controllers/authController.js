@@ -1,4 +1,5 @@
 const { User } = require('../models/user');
+const { UserProfile } = require('../models/userProfile');
 
 class AuthController {
   async login(req, res) {
@@ -15,6 +16,7 @@ class AuthController {
       }
 
       req.session.userAddress = user.userAddress;
+      req.session.userId = user._id; // Додано userId в сесію
       req.session.save();
 
       res.status(200).send({ message: 'Logged in successfully' });
@@ -23,6 +25,7 @@ class AuthController {
     }
   }
 
+
   async getUser(req, res) {
   
     if (!req.session.userAddress) {
@@ -30,7 +33,10 @@ class AuthController {
     }
 
     try {
-      const user = await User.findOne({ userAddress: req.session.userAddress }).select('-__v');
+      const user = await User.findOne({ userAddress: req.session.userAddress })
+        .select('-__v')
+        .populate('profile'); // додано заповнення профілю
+
       if (!user) {
         return res.status(404).send({ message: 'User not found' });
       }

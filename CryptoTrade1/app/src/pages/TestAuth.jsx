@@ -69,7 +69,7 @@ const SwapPage = () => {
                             </button>
                             {user && (
                                 <div>
-                                    <h2>Welcome, {user.userAddress}</h2>
+                                    <h2>Welcome, '{user._id}' {user.userAddress}</h2>
                                     <p>Registration Date: {new Date(user.registrationDate).toLocaleDateString()}</p>
                                 </div>
                             )}

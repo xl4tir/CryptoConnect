@@ -1,6 +1,6 @@
 import Navbar from "../components/Base/Navbar";
 import Footer from "../components/Base/Footer";
-import Publication from "../components/Publication";
+import Publication from "../components/Publication/Publication";
 import React from 'react';
 
 

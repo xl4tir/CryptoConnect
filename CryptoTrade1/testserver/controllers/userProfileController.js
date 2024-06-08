@@ -1,104 +1,107 @@
 const { UserProfile } = require('../models/userProfile');
+const { User } = require('../models/user');
 const fs = require('fs');
-
 
 const userProfileController = {
   getUserProfile: async (req, res) => {
     try {
-      const { userAddress } = req.params;
-      const userProfile = await UserProfile.findOne({ userAddress });
+      const { userId } = req.params;
+      const userProfile = await UserProfile.findOne({ _id: userId });
       if (!userProfile) {
-        return res.status(404).json({ message: 'User profile not found' });
+        return res.status(404).json({ message: 'Профіль користувача не знайдено' });
       }
       res.json(userProfile);
     } catch (error) {
-      console.error('Error getting user profile:', error);
-      res.status(500).json({ message: 'Internal Server Error' });
+      console.error('Помилка отримання профілю користувача:', error);
+      res.status(500).json({ message: 'Внутрішня помилка сервера' });
     }
   },
 
   createUserProfile: async (req, res) => {
     try {
-      const { userAddress, ...profileData } = req.body;
+      const { userId, ...profileData } = req.body;
       let profilePhoto = '';
       let backgroundPhoto = '';
-      console.log(req.file)
+
       if (req.file) {
         profilePhoto = req.file.path;
       }
-      console.log(req.file2)
+
       if (req.file2) {
         backgroundPhoto = req.file2.path;
       }
 
-      const userProfile = await UserProfile.create({ userAddress, ...profileData, profilePhoto, backgroundPhoto });
+      const userProfile = await UserProfile.create({ _id: userId, ...profileData, profilePhoto, backgroundPhoto });
+
+      await User.findOneAndUpdate({ _id: userId }, { profile: userProfile._id });
+
       res.status(201).json(userProfile);
     } catch (error) {
-      console.error('Error creating user profile:', error);
-      res.status(500).json({ message: 'Internal Server Error' });
+      console.error('Помилка створення профілю користувача:', error);
+      res.status(500).json({ message: 'Внутрішня помилка сервера' });
     }
   },
 
   updateUserProfile: async (req, res) => {
     try {
-      const { userAddress } = req.params;
+      const { userId } = req.params;
       const profileData = req.body;
-      const userProfile = await UserProfile.findOneAndUpdate({ userAddress }, profileData, { new: true });
+      const userProfile = await UserProfile.findOneAndUpdate({ _id: userId }, profileData, { new: true });
       if (!userProfile) {
-        return res.status(404).json({ message: 'User profile not found' });
+        return res.status(404).json({ message: 'Профіль користувача не знайдено' });
       }
       res.json(userProfile);
     } catch (error) {
-      console.error('Error updating user profile:', error);
-      res.status(500).json({ message: 'Internal Server Error' });
+      console.error('Помилка оновлення профілю користувача:', error);
+      res.status(500).json({ message: 'Внутрішня помилка сервера' });
     }
   },
 
   deleteUserProfile: async (req, res) => {
     try {
-      const { userAddress } = req.params;
-      const deletedUserProfile = await UserProfile.findOneAndDelete({ userAddress });
+      const { userId } = req.params;
+      const deletedUserProfile = await UserProfile.findOneAndDelete({ _id: userId });
       if (!deletedUserProfile) {
-        return res.status(404).json({ message: 'User profile not found' });
+        return res.status(404).json({ message: 'Профіль користувача не знайдено' });
       }
-      res.json({ message: 'User profile deleted successfully' });
+      res.json({ message: 'Профіль користувача успішно видалено' });
     } catch (error) {
-      console.error('Error deleting user profile:', error);
-      res.status(500).json({ message: 'Internal Server Error' });
+      console.error('Помилка видалення профілю користувача:', error);
+      res.status(500).json({ message: 'Внутрішня помилка сервера' });
     }
   },
 
   uploadProfilePhoto: async (req, res) => {
     try {
-      const { userAddress } = req.params;
-      const profile = await UserProfile.findOne({ userAddress });
+      const { userId } = req.params;
+      const profile = await UserProfile.findOne({ _id: userId });
       if (!profile) {
-        return res.status(404).json({ message: 'User profile not found' });
+        return res.status(404).json({ message: 'Профіль користувача не знайдено' });
       }
       const { path } = req.file;
       profile.profilePhoto = path;
       await profile.save();
       res.json({ profilePhoto: profile.profilePhoto });
     } catch (error) {
-      console.error('Error uploading profile photo:', error);
-      res.status(500).json({ message: 'Internal Server Error' });
+      console.error('Помилка завантаження фотографії профілю:', error);
+      res.status(500).json({ message: 'Внутрішня помилка сервера' });
     }
   },
 
   uploadBackgroundPhoto: async (req, res) => {
     try {
-      const { userAddress } = req.params;
-      const profile = await UserProfile.findOne({ userAddress });
+      const { userId } = req.params;
+      const profile = await UserProfile.findOne({ _id: userId });
       if (!profile) {
-        return res.status(404).json({ message: 'User profile not found' });
+        return res.status(404).json({ message: 'Профіль користувача не знайдено' });
       }
       const { path } = req.file;
       profile.backgroundPhoto = path;
       await profile.save();
       res.json({ backgroundPhoto: profile.backgroundPhoto });
     } catch (error) {
-      console.error('Error uploading background photo:', error);
-      res.status(500).json({ message: 'Internal Server Error' });
+      console.error('Помилка завантаження фонового зображення:', error);
+      res.status(500).json({ message: 'Внутрішня помилка сервера' });
     }
   }
 };

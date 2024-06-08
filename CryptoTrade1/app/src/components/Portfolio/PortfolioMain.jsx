@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import PortfolioTotalAssert from './PortfolioTotalAssert'
 import PortfolioBaseStatistics from './PortfolioBaseStatistics'
 import PortfolioMainInfo from './PortfolioMainInfo'
-import { fetchCoinsData } from "../../services/getCoinsApi";
-import { assertProcessing } from "../../services/AssertProcessing";
+import { assertProcessing } from "../../utils/assertProcessing";
 
 
 

@@ -39,10 +39,10 @@ function Coins() {
           The global crypto market cap is $1.17T, a 4.26% decrease over the last day.
         </p>  
         <div className='coin-search'>
-          <h1 className='coin-text'>Search a currency</h1>
+          <h1 className='mt-7 mb-2 text-center text-xl'>Search a currency</h1>
           <form>
             <input
-              className='coin-input '
+              className='h-12 bg-white/5 rounded-md placeholder-gray-300 text-white border-white/20 focus:border-none focus:outline-none focus:ring-1 focus:ring-pink-500/50'
               type='text'
               onChange={handleChange}
               placeholder='Search'

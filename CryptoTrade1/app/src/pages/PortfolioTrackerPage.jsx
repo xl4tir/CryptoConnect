@@ -1,26 +1,21 @@
 import Navbar from "../components/Base/Navbar";
 import Footer from "../components/Base/Footer";
 import PortfolioTracker from "../components/Portfolio/PortfolioTracker";
-import React, {useState} from 'react';
-import { fetchUserProfile, useFetchProfileEffect } from '../services/authUser';
+import React from 'react';
+import { useParams } from 'react-router-dom';
 
+const PortfolioTrackerPage = (props) => {
+    const { user_id } = useParams();
 
-
-
-const PortfolioTrackerPage = () => {
-
-    const [userProfile, setUserProfile] = useState(null);
-    useFetchProfileEffect(setUserProfile);
-  
     return (
         <div className="min-h-screen">
             <div className="gradient-bg-main">
                 <Navbar />
-                <PortfolioTracker userProfile = {userProfile}/>
+                <PortfolioTracker user_id={user_id} />
             </div>
             <Footer />
         </div>
-    )
-}
+    );
+};
 
-export default PortfolioTrackerPage
+export default PortfolioTrackerPage;

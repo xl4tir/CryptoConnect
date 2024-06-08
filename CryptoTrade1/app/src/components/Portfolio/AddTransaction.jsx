@@ -1,29 +1,30 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import ReactModal from 'react-modal';
-import { addTransaction } from '../../services/transactionService';
-
+import TransactionService from '../../services/TransactionService';
 
 const AddTransaction = ({ coins, portfolio }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [search, setSearch] = useState('');
     const [selectedCoin, setCoin] = useState('');
     const [selectedButton, setSelectedButton] = useState('buy');
-    const [purchasePriceInput, setPurchasePriceInput] = useState(''); // початкове значення може бути встановлене змінною selectedCoin.current_price
+    const [purchasePriceInput, setPurchasePriceInput] = useState('');
     const [totalSum, setTotalSum] = useState(0);
     const [quantity, setQuantity] = useState('');
+    
+
 
     const handleAddTransaction = async () => {
         const transactionData = {
-            portfolioId: portfolio._id,
+            portfolio_id: portfolio._id,
             cryptocurrency: selectedCoin.name,
             amount: parseFloat(quantity),
             operation: selectedButton === 'buy',
-            purchasePrice: parseFloat(purchasePriceInput), // Змініть це значення на реальну ціну
+            purchasePrice: parseFloat(purchasePriceInput),
             purchaseDate: new Date().toISOString(),
         };
 
         try {
-            await addTransaction(transactionData);
+            await TransactionService.createTransaction(transactionData);
             closeModal();
             window.location.reload();
         } catch (error) {
@@ -39,7 +40,7 @@ const AddTransaction = ({ coins, portfolio }) => {
 
     const handleChangePricePerCoin = (e) => {
         setPurchasePriceInput(e.target.value);
-        calculateTotalSum(e.target.value,quantity);
+        calculateTotalSum(e.target.value, quantity);
     };
 
     const handleChangeQuantity = (e) => {
@@ -57,12 +58,9 @@ const AddTransaction = ({ coins, portfolio }) => {
         }
     };
 
-
     const handleButtonClick = (buttonType) => {
         setSelectedButton(buttonType);
     };
-
-
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -85,14 +83,14 @@ const AddTransaction = ({ coins, portfolio }) => {
     );
 
 
+    
+
     return (
         <div>
             <button
-                className=" text-white text-xs py-2 px-4 mx-4 h-max rounded-md border border-[#2952e3] cursor-pointer hover:bg-[#2952e3] "
+                className="text-white text-xs py-2 px-4 mx-4 h-max rounded-md border border-[#2952e3] cursor-pointer hover:bg-[#2952e3]"
                 type="submit"
-                onClick={() => {
-                    openModal()
-                }}
+                onClick={openModal}
             >
                 + Add Transaction
             </button>
@@ -101,30 +99,25 @@ const AddTransaction = ({ coins, portfolio }) => {
                 onRequestClose={closeModal}
                 contentLabel="Modal"
                 ariaHideApp={false}
-
                 style={{
                     content: {
-
                         inset: '40px',
                         border: '0px solid rgb(204, 204, 204)',
                         overflow: 'auto',
                         outline: 'none',
-
                         margin: '0 auto',
                         background: 'rgba(255, 255, 255, 0)',
                         padding: '0',
                         boxShadow: '0px 4px 30px rgba(0, 0, 0, 0)',
-
                     },
                     overlay: {
                         background: 'rgba(0, 0, 0, 0.1)',
                     },
                 }}
             >
-                {/* Вміст модального вікна */}
                 <div className="fixed w-full inset-0 flex items-center justify-center">
-                    <div className="absolute w-full inset-0  bg-gray-800 opacity-50"></div>
-                    <div style={ !selectedCoin ? ({ height: '550px' }) : ({ height: '450px' })} className="z-10 w-max mx-auto p-8 opacity-1 blue-glassmorphism-modalWindow rounded-md shadow-md relative">
+                    <div className="absolute w-full inset-0 bg-gray-800 opacity-50"></div>
+                    <div style={!selectedCoin ? { height: '550px' } : { height: '450px' }} className="z-10 w-max mx-auto p-8 opacity-1 blue-glassmorphism-modalWindow rounded-md shadow-md relative">
                         {!selectedCoin ? (
                             <div>
                                 <div className="flex flex-row items-center w-full justify-between mb-2">
@@ -132,35 +125,28 @@ const AddTransaction = ({ coins, portfolio }) => {
                                         Select Coin
                                     </h2>
                                     <button className="bg-none rounded-md" onClick={closeModal}>
-                                        <svg class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">  <line x1="18" y1="6" x2="6" y2="18" />  <line x1="6" y1="6" x2="18" y2="18" /></svg>
+                                        <svg className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">  <line x1="18" y1="6" x2="6" y2="18" />  <line x1="6" y1="6" x2="18" y2="18" /></svg>
                                     </button>
-
                                 </div>
                                 <div className="flex flex-row w-full mb-1">
                                     <form>
                                         <input
-                                            className="text-white blue-glassmorphism text-xs placeholder:text-white shadow-none border-1 border-gray-500 font-light mb-4 mt-2 w-96  p-2 mb-4 rounded-md"
+                                            className="text-white blue-glassmorphism text-xs placeholder:text-white shadow-none border-1 border-gray-500 font-light mb-4 mt-2 w-96 p-2 mb-4 rounded-md"
                                             onChange={handleChange}
                                             placeholder='Search'
                                         />
                                     </form>
                                 </div>
-
                                 {filteredCoins.slice(0, 8).map(coin => (
-                                    <div onClick={() => {
-
-                                        setCoin(coin)
-                                    }
-                                    } className="flex flex-row items-center py-3 px-3 w-full justify-between cursor-pointer rounded-md hover:bg-blue-800/10" key={coin.id}>
+                                    <div onClick={() => setCoin(coin)} className="flex flex-row items-center py-3 px-3 w-full justify-between cursor-pointer rounded-md hover:bg-blue-800/10" key={coin.id}>
                                         <div className="flex flex-row items-center ">
                                             <img className="w-6" src={coin.image} alt="" />
                                             <p className="text-sm font-semibold mx-2 text-white">{coin.name}</p>
                                             <p className="text-sm font-semibold text-gray-400">{coin.symbol.toUpperCase()}</p>
                                         </div>
-                                        <svg class="h-6 w-6 text-gray-400" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <polyline points="9 6 15 12 9 18" /></svg>
+                                        <svg className="h-6 w-6 text-gray-400" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <polyline points="9 6 15 12 9 18" /></svg>
                                     </div>
                                 ))}
-
                             </div>
                         ) : (
                             <div>
@@ -199,8 +185,8 @@ const AddTransaction = ({ coins, portfolio }) => {
                                         <input
                                             id="quantityInput"
                                             className="text-white blue-glassmorphism text-xs placeholder:text-white shadow-none border-1 border-gray-500 font-light mb-4 mt-2 w-full  p-2 mb-4 rounded-md"
-                                            placeholder="0.00" 
-                                            value={quantity} 
+                                            placeholder="0.00"
+                                            value={quantity}
                                             onChange={handleChangeQuantity}
                                         />
                                     </div>

@@ -19,7 +19,8 @@ const Profile = () => {
             try {
                 const user = await AuthService.getCurrentUser();
                 setCurrentUser(user.data);
-                const profile = await fetchUserProfile(currentUser._id);
+                console.log(currentUser._id)
+                const profile = await fetchUserProfile(currentAccount);
                 setUserProfile(profile);
             } catch (error) {
                 if (error.response && error.response.status === 404) {
@@ -36,21 +37,21 @@ const Profile = () => {
 
     const handleCreateProfile = async (profileData) => {
         try {
-            const newProfileData = { ...profileData, userId: currentUser._id };
+            const newProfileData = { ...profileData, userAddress: currentAccount };
             const newProfile = await createUserProfile(newProfileData);
             setUserProfile(newProfile);
             let profilePhoto = newProfileData.profilePhoto;
             let backgroundPhoto = newProfileData.backgroundPhoto;
 
             if (profilePhoto) {
-                await uploadProfilePhoto(currentUser._id, profilePhoto);
-                const updatedProfile = await fetchUserProfile(currentUser._id);
+                await uploadProfilePhoto(currentAccount, profilePhoto);
+                const updatedProfile = await fetchUserProfile(currentAccount);
                 setUserProfile(updatedProfile);
             }
 
             if (backgroundPhoto) {
-                await uploadBackgroundPhoto(currentUser._id, backgroundPhoto);
-                const updatedProfile = await fetchUserProfile(currentUser._id);
+                await uploadBackgroundPhoto(currentAccount, backgroundPhoto);
+                const updatedProfile = await fetchUserProfile(currentAccount);
                 setUserProfile(updatedProfile);
             }
 
@@ -63,21 +64,21 @@ const Profile = () => {
     const handleEditProfile = async (profileData) => {
         try {
             const { name, username, email, dateOfBirth, gender, country, city, bio, favoriteCategories } = profileData;
-            const updatedProfile = await updateUserProfile(currentUser._id, { name, username, email, dateOfBirth, gender, country, city, bio, favoriteCategories });
+            const updatedProfile = await updateUserProfile(currentAccount, { name, username, email, dateOfBirth, gender, country, city, bio, favoriteCategories });
             setUserProfile(updatedProfile);
 
             let profilePhoto = profileData.profilePhoto;
             let backgroundPhoto = profileData.backgroundPhoto;
 
             if (profilePhoto instanceof File || profilePhoto instanceof Blob) {
-                await uploadProfilePhoto(currentUser._id, profilePhoto);
-                const updatedProfile = await fetchUserProfile(currentUser._id);
+                await uploadProfilePhoto(currentAccount, profilePhoto);
+                const updatedProfile = await fetchUserProfile(currentAccount);
                 setUserProfile(updatedProfile);
             }
 
             if (backgroundPhoto instanceof File || backgroundPhoto instanceof Blob) {
-                await uploadBackgroundPhoto(currentUser._id, backgroundPhoto);
-                const updatedProfile = await fetchUserProfile(currentUser._id);
+                await uploadBackgroundPhoto(currentAccount, backgroundPhoto);
+                const updatedProfile = await fetchUserProfile(currentAccount);
                 setUserProfile(updatedProfile);
             }
 
@@ -89,7 +90,7 @@ const Profile = () => {
 
     const handleDeleteProfile = async () => {
         try {
-            await deleteUserProfile(currentUser._id);
+            await deleteUserProfile(currentAccount);
             setUserProfile(null);
             setShowCreateProfileModal(true);
         } catch (error) {
@@ -103,7 +104,7 @@ const Profile = () => {
                 <div className="max-w-screen-lg flex w-full flex-col items-center">
                     <ProfileInfo userProfile={userProfile} onEdit={() => setShowEditProfileModal(true)} onDelete={handleDeleteProfile} />
                     <div className='px-10'>
-                        <ContentTabs user={currentUser} />
+                        <ContentTabs userId={currentUser._id} />
                     </div>
 
                 </div>
@@ -117,7 +118,7 @@ const Profile = () => {
                 >
                     <div className="flex flex-col w-full">
                         <h2 className="text-white text-2xl font-semibold mb-4">Create Profile</h2>
-                        <p className="text-white mb-4">User ID: {currentUser._id}</p>
+                        <p className="text-white mb-4">User Address: {currentAccount}</p>
                         <ProfileForm onSubmit={handleCreateProfile} />
                     </div>
                 </ReactModal>

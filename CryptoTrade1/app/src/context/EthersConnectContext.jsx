@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState, useContext } from 'react';
-import { AuthContext } from './AuthContext';
+import { AuthContext } from './authContext';
 import { ethers } from 'ethers';
 
 export const EthersConnectContext= createContext();
@@ -33,6 +33,7 @@ export const EthersConnectProvider = ({ children }) => {
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             await login(accounts[0]);
             alert('Logged in successfully');
+            window.location.href = window.location.href
         } catch (error) {
             console.error('Login error', error);
             alert('Login failed');

@@ -152,7 +152,7 @@ const UniswapComponent = () => {
 
                     {account && (
                         <label for="price" class="block text-sm leading-6 text-gray-300">
-                            Balance: {isNaN(Number(balance[destToken])) ? '0.000' : Number(balance[destToken]).toFixed(3)} {srcToken}
+                            Balance: {isNaN(Number(balance[destToken])) ? '0.000' : Number(balance[destToken]).toFixed(3)} {destToken}
                         </label>)}
 
                     <div className='relative white-glassmorphism  p-4 py-6 rounded-xl mb-2 border-[1px]  hover:border-zinc-600'>

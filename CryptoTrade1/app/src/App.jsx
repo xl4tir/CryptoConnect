@@ -25,8 +25,16 @@ const App = () => (
           <Route path="/signup" element={<SignUp />} exact />
           <Route path="/login" element={<Login />} exact />
           <Route path="/profile" element={<ProfilePage />} exact />
-          <Route path="/portfolio-tracker" element={<PortfolioTrackerPage />} exact />
-          <Route path="/publications/:id" element={<PublicationPage />} exact/>
+          <Route
+                path="/portfolio-tracker/:user_id"
+                element={<PortfolioTrackerPage />}
+                exact
+            />
+            <Route
+                path="/publications/:id"
+                element={<PublicationPage />}
+                exact
+            />
         
       </Routes>
     </Router>
