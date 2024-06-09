@@ -6,11 +6,13 @@ import { getPostById } from '../../services/postService';
 import AuthService from '../../services/AuthService';
 import { getUserProfilePhotoURL } from '../../services/userProfileService';
 import { createComment } from '../../services/commentsService'; // Імпорт сервісу для створення коментаря
+import Loader from '../Loader';
+
 
 const Publication = () => {
     const { currentAccount } = useContext(TransactionContext);
     const { id } = useParams();
-
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
     const [publication, setPublication] = useState(null);
     const [user, setUser] = useState(null);
@@ -44,6 +46,8 @@ const Publication = () => {
             } catch (error) {
                 console.error('Error fetching post:', error);
                 navigate('/not-found');
+            } finally {
+                setIsLoading(false);
             }
         };
 
@@ -82,8 +86,11 @@ const Publication = () => {
         }
     };
 
-    if (!publication || !user) {
-        return <div>Loading...</div>;
+    if (!publication || !user || isLoading) {
+        return (
+            <div className='flex justify-center items-center h-screen'>
+                <Loader />
+            </div>);
     }
 
     return (
@@ -162,7 +169,7 @@ const Publication = () => {
                 </form>
                 <div className="h-[1px] w-full bg-white opacity-10" />
                 <PublicationTabs post_id={publication._id} updateTabs={updateTabs} setUpdateTabs={setUpdateTabs} />
-        
+
             </div>
         </div>
     );

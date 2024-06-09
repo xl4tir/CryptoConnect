@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ReactModal from 'react-modal';
 import TransactionService from '../../services/TransactionService';
 
-const AddTransaction = ({ coins, portfolio }) => {
+const AddTransaction = ({ coins, portfolio, updatePortfolio  }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [search, setSearch] = useState('');
     const [selectedCoin, setCoin] = useState('');
@@ -26,7 +26,7 @@ const AddTransaction = ({ coins, portfolio }) => {
         try {
             await TransactionService.createTransaction(transactionData);
             closeModal();
-            window.location.reload();
+            updatePortfolio();
         } catch (error) {
             console.error('Помилка під час додавання транзакції:', error);
         }

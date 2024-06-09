@@ -9,6 +9,7 @@ import PortfolioService from '../../services/portfolioService'; // Зміна і
 import PortfolioMain from './PortfolioMain';
 import { fetchCoinsData } from "../../services/getCoinsApi";
 import { MdCurrencyBitcoin } from "react-icons/md";
+import Loader from '../Loader';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -54,10 +55,13 @@ export default function PortfolioTracker({ user_id }) { // Зміна назви
     const [isModalOpen, setIsModalOpen] = React.useState(false);
     const [newPortfolioName, setNewPortfolioName] = React.useState('');
     const { user: currentUser } = React.useContext(AuthContext);
+    const [isLoading, setIsLoading] = React.useState(true);
+
 
     React.useEffect(() => {
         const fetchData = async () => {
             try {
+                setIsLoading(true);
                 // Отримання даних про монети
                 const coinsData = await fetchCoinsData();
                 setCoins(coinsData);
@@ -65,7 +69,7 @@ export default function PortfolioTracker({ user_id }) { // Зміна назви
             } catch (error) {
                 console.error('Помилка при завантаженні даних про монети', error);
             }
-    
+
             try {
                 // Отримання портфоліо за user_id
                 const portfolios = await PortfolioService.getAllPortfoliosByUserId(user_id);
@@ -74,11 +78,14 @@ export default function PortfolioTracker({ user_id }) { // Зміна назви
             } catch (error) {
                 console.error('Помилка при завантаженні портфоліо', error);
             }
+
+            setIsLoading(false);
+
         };
-    
+
         fetchData();
     }, [user_id]);
-    
+
 
     const handleCreatePortfolio = async () => {
         if (newPortfolioName.trim()) {
@@ -91,6 +98,15 @@ export default function PortfolioTracker({ user_id }) { // Зміна назви
             } catch (error) {
                 console.error('Помилка при створенні портфоліо', error);
             }
+        }
+    };
+
+    const updatePortfolios = async () => {
+        try {
+            const portfolios = await PortfolioService.getAllPortfoliosByUserId(user_id);
+            setUserPortfolios(portfolios);
+        } catch (error) {
+            console.error('Помилка при оновленні портфоліо', error);
         }
     };
 
@@ -108,55 +124,64 @@ export default function PortfolioTracker({ user_id }) { // Зміна назви
 
     return (
         <div className=" md:w-max mx-auto  w-full justify-center items-center pb-24  mt-24 px-10 tracking-wider">
-            <Box
-                sx={{ flexGrow: 1, bgcolor: 'background.inherit', display: 'flex', minHeight: 500, width: 'xl', maxWidth: 'xl', minWidth: 'xl' }}
-            >
-                <Tabs className='text-white'
-                    orientation="vertical"
-                    variant="scrollable"
-                    value={value}
-                    textColor="inherit"
-                    indicatorColor="secondary"
-                    onChange={handleChange}
-                    aria-label="icon position Vertical tabs"
-                    sx={{ borderRight: 1, borderColor: 'rgba(255, 255, 255, 0.1)', width: '250px', maxWidth: '250px', minWidth: '250px' }}
-                >
-                    
-                    {userPortfolios.map((portfolio, index) => (
-                       
-                        <Tab iconPosition="start"  icon={<MdCurrencyBitcoin size={38}/>}  
-                        sx={{fontFamily: 'Montserrat, sans-serif', 
-                            justifyItems:"self-start",
-                            justifyContent:"flex-start", 
-                            alignItems: 'center',
-                            textAlign:"left", fontSize: '14px', textTransform: 'none' }}
-                            key={portfolio.id} label={portfolio.name} {...a11yProps(index)} />
-                    ))}
-                    <div className="flex w-full bg-white opacity-10 h-px my-4" />
-                    {canEdit &&
-                        <button className="text-pink-500 px-4  flex flex-row items-center  justify-start" onClick={() => setIsModalOpen(true)}>
-                            <p className="text-3xl mr-1 font-light">+</p>
-                            <div className="text-sm font-medium">
-                                <p>Create portfolio</p>
+            {isLoading ? (
+                <div className='flex justify-center items-center h-screen'>
+                    <Loader />
+                </div>
+            ) : (
 
-                            </div>
-                        </button>
-                    }
-                </Tabs>
-                {userPortfolios.map((portfolio, index) => (
-                    <TabPanel
-                        key={portfolio.id}
+                <Box
+                    sx={{ flexGrow: 1, bgcolor: 'background.inherit', display: 'flex', minHeight: 500, width: 'xl', maxWidth: 'xl', minWidth: 'xl' }}
+                >
+                    <Tabs className='text-white'
+                        orientation="vertical"
+                        variant="scrollable"
                         value={value}
-                        index={index}
-                        className='text-white '
-                        sx={{ width: 'xl', maxWidth: 'xl', minWidth: 'xl', padding: '0px' }}
+                        textColor="inherit"
+                        indicatorColor="secondary"
+                        onChange={handleChange}
+                        aria-label="icon position Vertical tabs"
+                        sx={{ borderRight: 1, borderColor: 'rgba(255, 255, 255, 0.1)', width: '250px', maxWidth: '250px', minWidth: '250px' }}
                     >
-                        <div>
-                             <PortfolioMain portfolio={portfolio} coins={coins} /> 
-                        </div>
-                    </TabPanel>
-                ))}
-            </Box>
+
+                        {userPortfolios.map((portfolio, index) => (
+
+                            <Tab iconPosition="start" icon={<MdCurrencyBitcoin size={38} />}
+                                sx={{
+                                    fontFamily: 'Montserrat, sans-serif',
+                                    justifyItems: "self-start",
+                                    justifyContent: "flex-start",
+                                    alignItems: 'center',
+                                    textAlign: "left", fontSize: '14px', textTransform: 'none'
+                                }}
+                                key={portfolio.id} label={portfolio.name} {...a11yProps(index)} />
+                        ))}
+                        <div className="flex w-full bg-white opacity-10 h-px my-4" />
+                        {canEdit &&
+                            <button className="text-pink-500 px-4  flex flex-row items-center  justify-start" onClick={() => setIsModalOpen(true)}>
+                                <p className="text-3xl mr-1 font-light">+</p>
+                                <div className="text-sm font-medium">
+                                    <p>Create portfolio</p>
+
+                                </div>
+                            </button>
+                        }
+                    </Tabs>
+                    {userPortfolios.map((portfolio, index) => (
+                        <TabPanel
+                            key={portfolio.id}
+                            value={value}
+                            index={index}
+                            className='text-white '
+                            sx={{ width: 'xl', maxWidth: 'xl', minWidth: 'xl', padding: '0px' }}
+                        >
+                            <div>
+                                <PortfolioMain portfolio={portfolio} coins={coins} updatePortfolios={updatePortfolios} />
+                            </div>
+                        </TabPanel>
+                    ))}
+                </Box>
+            )}
 
             <ReactModal
                 isOpen={isModalOpen}
@@ -181,7 +206,7 @@ export default function PortfolioTracker({ user_id }) { // Зміна назви
                         onChange={(e) => setNewPortfolioName(e.target.value)}
                         className={`my-2 w-full rounded-md p-2 outline-none bg-blue-300/10 text-white border-transparent focus:ring-0  ${isOverLimit ? 'focus:border focus:border-red-500 bg-red-400/20' : 'focus:border-white/20'}`}
                     />
-                    <label className={`text-xs ${isOverLimit ? 'text-red-500' : 'text-white/80'}`} htmlFor=""> {charactersLeft}/24 characters</label>    
+                    <label className={`text-xs ${isOverLimit ? 'text-red-500' : 'text-white/80'}`} htmlFor=""> {charactersLeft}/24 characters</label>
                     <button
                         onClick={handleCreatePortfolio}
                         disabled={isOverLimit}

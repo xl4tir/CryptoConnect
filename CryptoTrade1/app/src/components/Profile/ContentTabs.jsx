@@ -6,6 +6,7 @@ import Tabs from '@mui/material/Tabs';
 import TabPanel from '@mui/lab/TabPanel';
 import PublicationsList from './PublicationsList';
 import CommentListByUserId from './CommentListByUserId'
+import Loader from '../Loader';
 
 
 export default function PublicationTabs({ user }) {
@@ -27,7 +28,7 @@ export default function PublicationTabs({ user }) {
           aria-label="secondary tabs example"
 
         >
-          <Tab sx={{fontFamily: 'Montserrat, sans-serif', fontSize: '14px', textTransform: 'none' }} value="publications" label="Publications" />
+          <Tab sx={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px', textTransform: 'none' }} value="publications" label="Publications" />
           <Tab sx={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px', textTransform: 'none' }} value="comments" label="Comments" />
           <Tab sx={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px', textTransform: 'none' }} value="reactions" label="Reactions" />
 
@@ -39,11 +40,11 @@ export default function PublicationTabs({ user }) {
       <TabPanel sx={{ width: '100%', padding: '24px 0 24px 0' }} className='text-white' value="publications" >
         <PublicationsList user={user} />
       </TabPanel>
-      <TabPanel sx={{ width: '100%' , padding: '24px 0 24px 0' }} className='text-white' value="comments" >
+      <TabPanel sx={{ width: '100%', padding: '24px 0 24px 0' }} className='text-white' value="comments" >
         <CommentListByUserId user_id={user._id} />
       </TabPanel>
-      <TabPanel sx={{ width: '100%' }} className='text-white' value="reactions" >
-        Reactions
+      <TabPanel sx={{ width: '100%' , padding: '24px 0 24px 0' }} className='text-white' value="reactions" >
+        <div className='flex max-w-screen-lg  w-screen m-auto'><div className='flex max-w-screen-lg items-center justify-center w-screen m-auto'><Loader></Loader></div></div>
       </TabPanel>
 
     </TabContext>

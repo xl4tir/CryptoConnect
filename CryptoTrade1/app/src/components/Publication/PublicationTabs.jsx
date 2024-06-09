@@ -5,8 +5,9 @@ import TabContext from '@mui/lab/TabContext';
 import Tabs from '@mui/material/Tabs';
 import TabPanel from '@mui/lab/TabPanel';
 import CommentList from './CommentList';
+import Loader from '../Loader';
 
-export default function PublicationTabs({ post_id, updateTabs, setUpdateTabs}) {
+export default function PublicationTabs({ post_id, updateTabs, setUpdateTabs }) {
   const [value, setValue] = React.useState('comments');
 
   const handleChange = (event, newValue) => {
@@ -30,9 +31,12 @@ export default function PublicationTabs({ post_id, updateTabs, setUpdateTabs}) {
         <div className="flex w-full bg-white opacity-10 h-px " />
       </Box>
       <TabPanel sx={{ width: '100%', padding: '24px 0 24px 0' }} className='text-white' value="comments" >
-        <CommentList post_id={post_id} updateTabs={updateTabs} setUpdateTabs={setUpdateTabs}/>
+        <CommentList post_id={post_id} updateTabs={updateTabs} setUpdateTabs={setUpdateTabs} />
       </TabPanel>
-      <TabPanel className='text-white' value="reposts">Reposts</TabPanel>
+      <TabPanel sx={{ width: '100%', padding: '24px 0 24px 0' }} className='text-white' value="reposts">
+        <div className=' m-auto'><Loader></Loader></div>
+
+      </TabPanel>
     </TabContext>
   );
 }

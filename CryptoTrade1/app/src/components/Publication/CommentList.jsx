@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { getCommentsByPostId } from '../../services/commentsService';
 import { getUserProfilePhotoURL } from '../../services/userProfileService';
 import { formatDate } from '../../utils/dateMainFormat';
+import Loader from '../Loader';
 
 const CommentList = ({ post_id, updateTabs, setUpdateTabs }) => {
     const [comments, setComments] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchComments = async () => {
@@ -14,11 +16,18 @@ const CommentList = ({ post_id, updateTabs, setUpdateTabs }) => {
                 setUpdateTabs(false)
             } catch (error) {
                 console.error('Error fetching comments:', error);
+            }finally {
+                setLoading(false);
+
             }
         };
 
         fetchComments();
     }, [post_id] [updateTabs]);
+
+    if (loading) {
+        return <div className='flex  items-center justify-center  m-auto'><Loader></Loader></div>;
+    }
 
     return (
         <div className="max-w-screen-lg flex w-full justify-start flex-col ">

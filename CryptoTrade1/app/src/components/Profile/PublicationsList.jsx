@@ -6,6 +6,8 @@ import RepostModal from '../Publication/RepostModal';
 import { getPostsByUserId, createPost, createRepost } from '../../services/postService'; // Додано імпорт createRepost
 import { getUserProfilePhotoURL } from '../../services/userProfileService';
 import { createComment } from '../../services/commentsService'; 
+import Loader from '../Loader';
+
 
 const PublicationsList = ({ user }) => {
   const navigate = useNavigate();
@@ -19,6 +21,7 @@ const PublicationsList = ({ user }) => {
   const [error, setError] = useState(null);
   const [newPostText, setNewPostText] = useState('');
   const [newCommentText, setNewCommentText] = useState('');
+ 
 
 
   useEffect(() => {
@@ -31,6 +34,7 @@ const PublicationsList = ({ user }) => {
         setError('Failed to load publications');
       } finally {
         setLoading(false);
+   
       }
     };
 
@@ -138,7 +142,7 @@ const PublicationsList = ({ user }) => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className='flex max-w-screen-lg items-center justify-center w-screen m-auto'><Loader></Loader></div>;
   }
 
   if (error) {

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import ReactModal from 'react-modal';
 import { IoMdMore } from "react-icons/io";
 import { AiOutlineDelete } from "react-icons/ai";
@@ -9,22 +9,25 @@ import PortfolioService from '../../services/portfolioService';
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
 import { MdCurrencyBitcoin } from "react-icons/md";
 import { IoIosWarning } from "react-icons/io";
+import Loader from '../Loader';
 
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
 }
 
-const PortfolioMainInfo = ({ portfolio, portfolioAssets, coins }) => {
+const PortfolioMainInfo = ({ portfolio, portfolioAssets, coins, updatePortfolio  }) => {
     const { user } = useContext(AuthContext); // Get user information from context
     const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
     const [newName, setNewName] = useState(portfolio.name);
+    const [isLoading, setIsLoading] = useState(false);
 
     let totalHoldingsUSD = 0;
     let totalProfit24h = 0;
     let totalPercentageChange24h = 0;
 
+   
     if (portfolioAssets && portfolioAssets.length > 0) {
         portfolioAssets.forEach((asset) => {
             if (asset.hasOwnProperty('holdingsUSD') && asset.hasOwnProperty('price') && asset.hasOwnProperty('priceChange_24h')) {
@@ -60,7 +63,8 @@ const PortfolioMainInfo = ({ portfolio, portfolioAssets, coins }) => {
         try {
             await PortfolioService.updatePortfolio(portfolio._id, { name: newName });
             setEditModalOpen(false);
-            // Optionally, you can add logic to update the portfolio list in the UI
+            updatePortfolio();
+
         } catch (error) {
             console.error('Error updating portfolio:', error);
         }
@@ -70,7 +74,8 @@ const PortfolioMainInfo = ({ portfolio, portfolioAssets, coins }) => {
         try {
             await PortfolioService.deletePortfolio(portfolio._id);
             setDeleteModalOpen(false);
-            // Optionally, you can add logic to remove the portfolio from the list in the UI
+            updatePortfolio();
+   
         } catch (error) {
             console.error('Error deleting portfolio:', error);
         }
@@ -80,6 +85,15 @@ const PortfolioMainInfo = ({ portfolio, portfolioAssets, coins }) => {
     const isOverLimit = newName.length > maxLength;
    
     const charactersLeft = newName.length;
+
+
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <Loader />
+            </div>
+        );
+    }
 
     return (
         <div className="flex flex-row w-full items-center justify-between">
@@ -109,7 +123,7 @@ const PortfolioMainInfo = ({ portfolio, portfolioAssets, coins }) => {
             </div>
             {user && user._id === portfolio.user_id && (
                 <div className="relative flex flex-row items-center">
-                    <AddTransaction coins={coins} portfolio={portfolio} />
+                    <AddTransaction coins={coins} portfolio={portfolio} updatePortfolio={updatePortfolio}/>
                     <Menu as="div" className="relative inline-block text-left">
                         <div>
                             <MenuButton className="border py-1 px-1 rounded-md border-1 border-gray-400/40 cursor-pointer hover:bg-gray-300/20 hover:border-gray-100/70">

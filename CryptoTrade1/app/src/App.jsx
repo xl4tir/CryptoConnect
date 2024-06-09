@@ -1,8 +1,8 @@
 import {BrowserRouter as Router, Routes, Route  } from "react-router-dom";
 import SendToPage from "./pages/SendToPage";
 import Market from "./pages/Market";
-import SignUp from "./pages/SignUp";
-import Login from "./pages/Login";
+
+
 import ProfilePage from "./pages/ProfilePage";
 import PublicationPage from './pages/PublicationPage';
 import PortfolioTrackerPage from './pages/PortfolioTrackerPage';
@@ -22,8 +22,7 @@ const App = () => (
           <Route path="/swap" element={<SwapPage />} exact />
           <Route path="/" element={<SendToPage />} exact />
           <Route path="/market" element={<Market />} exact />
-          <Route path="/signup" element={<SignUp />} exact />
-          <Route path="/login" element={<Login />} exact />
+
           <Route path="/profile" element={<ProfilePage />} exact />
           <Route
                 path="/portfolio-tracker/:user_id"

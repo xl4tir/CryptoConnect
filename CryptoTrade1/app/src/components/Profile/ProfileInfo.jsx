@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { getUserProfilePhotoURL } from '../../services/userProfileService';
 import { FiChevronDown } from 'react-icons/fi';
+import { AiOutlineDelete } from "react-icons/ai";
 
 const ProfileInfo = ({ userProfile, onEdit, onDelete }) => {
   const [showMoreInfo, setShowMoreInfo] = useState(false);
@@ -52,6 +53,10 @@ const ProfileInfo = ({ userProfile, onEdit, onDelete }) => {
             </svg>
             Edit
           </button>
+          <AiOutlineDelete onClick={onDelete} className=' cursor-pointer ml-2 py-2 px-3 h-10 w-auto bg-inherit 
+          text-sm text-white rounded-md hover:bg-red-600 flex border-solid 
+          justify-between gap-2 items-center border border-red-600' size={35} />
+          
         </div>
         <div className='flex  mt-8 justify-start'>
           <p className='text-left text-gray-300 text-sm '>Joined {formatRegistrationDate(userProfile.registrationDate)}</p>
@@ -60,48 +65,51 @@ const ProfileInfo = ({ userProfile, onEdit, onDelete }) => {
             className="bg-inherit text-left text-white text-sm ml-10 flex items-center"
           >
             <span>More info </span>
-            <FiChevronDown className={`ml-2 ${showMoreInfo ? 'transform rotate-180' : ''}`} />
+            <FiChevronDown  className={`ml-2 ${showMoreInfo ? 'transform rotate-180' : ''}`} />
           </button>
         </div>
         <div className="flex w-full bg-white opacity-10 h-px mt-3 mb-1" />
 
         {showMoreInfo && (
-          <>
+          <div >
             {/* Додаткова інформація */}
-            <p className="text-left mt-1 text-white font-light md:w-9/12 w-11/12 text-base">
-              <b className="font-medium">Email:</b> {userProfile.email}
+            <div className=''>
+              <div className='flex flex-row'>
+                <p className="text-left text-md mt-1 text-white font-light md:w-9/12 w-11/12 text-sm">
+                  <b className="font-base">Email:</b> {userProfile.email}
+                </p>
+                <p className="text-left mt-1 text-white font-light md:w-9/12 w-11/12 text-sm">
+                  <b className="font-base">Date of Birth:</b> {userProfile.dateOfBirth}
+                </p>
+                <p className="text-left mt-1 text-white font-light md:w-9/12 w-11/12 text-sm">
+                  <b className="font-base">Gender:</b> {userProfile.gender}
+                </p>
+              </div>
+              <div className='flex flex-row mt-1' >
+                <p className="text-left mt-1 text-white font-light md:w-9/12 w-11/12 text-sm">
+                  <b className="font-base">Country:</b> {userProfile.country}
+                </p>
+                <p className="text-left mt-1 text-white font-light md:w-9/12 w-11/12 text-sm">
+                  <b className="font-base">City:</b> {userProfile.city}
+                </p>
+
+                <p className="text-left mt-1 text-white font-light md:w-9/12 w-11/12 text-sm">
+                  <b className="font-base">Favorite Categories:</b> {userProfile.favoriteCategories.join(', ')}
+                </p>
+              </div>
+            </div>
+
+            <p className="text-left my-2 text-white font-light md:w-9/12 w-11/12 text-sm">
+              <b className="font-base">Bio:</b> {userProfile.bio}
             </p>
-            <p className="text-left mt-1 text-white font-light md:w-9/12 w-11/12 text-base">
-              <b className="font-medium">Date of Birth:</b> {userProfile.dateOfBirth}
-            </p>
-            <p className="text-left mt-1 text-white font-light md:w-9/12 w-11/12 text-base">
-              <b className="font-medium">Gender:</b> {userProfile.gender}
-            </p>
-            <p className="text-left mt-1 text-white font-light md:w-9/12 w-11/12 text-base">
-              <b className="font-medium">Country:</b> {userProfile.country}
-            </p>
-            <p className="text-left mt-1 text-white font-light md:w-9/12 w-11/12 text-base">
-              <b className="font-medium">City:</b> {userProfile.city}
-            </p>
-            <p className="text-left mt-1 text-white font-light md:w-9/12 w-11/12 text-base">
-              <b className="font-medium">Bio:</b> {userProfile.bio}
-            </p>
-            <p className="text-left mt-1 text-white font-light md:w-9/12 w-11/12 text-base">
-              <b className="font-medium">Favorite Categories:</b> {userProfile.favoriteCategories.join(', ')}
-            </p>
-          </>
+          </div>
         )}
 
-        {/* <div className="flex mt-4 items-center">
+        <div className="flex mt-4 items-center">
 
 
-          <button
-            onClick={onDelete}
-            className="ml-2 py-2 px-4 bg-red-500 text-white rounded-md hover:bg-red-700"
-          >
-            Delete Profile
-          </button>
-        </div> */}
+          
+        </div>
       </div>
     </div>
   );
