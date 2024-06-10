@@ -9,7 +9,7 @@ import CommentListByUserId from './CommentListByUserId'
 import Loader from '../Loader';
 
 
-export default function PublicationTabs({ user }) {
+export default function PublicationTabs({ user, currentUser }) {
   const [value, setValue] = React.useState('publications');
 
   const handleChange = (event, newValue) => {
@@ -37,14 +37,14 @@ export default function PublicationTabs({ user }) {
 
       </Box>
 
-      <TabPanel sx={{ width: '100%', padding: '24px 0 24px 0' }} className='text-white' value="publications" >
-        <PublicationsList user={user} />
+      <TabPanel sx={{ width: '100%', maxWidth: '768px',  padding: '24px 0 24px 0' }} className='text-white' value="publications" >
+      {user && user._id && <PublicationsList user={user} currentUser={currentUser} />}
       </TabPanel>
       <TabPanel sx={{ width: '100%', padding: '24px 0 24px 0' }} className='text-white' value="comments" >
-        <CommentListByUserId user_id={user._id} />
+        {user && user._id && <CommentListByUserId user_id={user._id} />}
       </TabPanel>
-      <TabPanel sx={{ width: '100%' , padding: '24px 0 24px 0' }} className='text-white' value="reactions" >
-        <div className='flex max-w-screen-lg  w-screen m-auto'><div className='flex max-w-screen-lg items-center justify-center w-screen m-auto'><Loader></Loader></div></div>
+      <TabPanel sx={{ width: '100%', padding: '24px 0 24px 0' }} className='text-white' value="reactions" >
+        <div className='flex max-w-screen-md  w-screen m-auto'><div className='flex max-w-screen-md items-center justify-center w-screen m-auto'><Loader></Loader></div></div>
       </TabPanel>
 
     </TabContext>

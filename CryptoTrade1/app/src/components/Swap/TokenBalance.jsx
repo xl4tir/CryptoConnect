@@ -9,6 +9,7 @@ const TokenBalance = ({ name, walletAddress }) => {
     const [tokenAddress, setTokenAddress] = useState('');
     const [copyIcon, setCopyIcon] = useState({ icon: ClipboardIcon });
     const [txPending, setTxPending] = useState(false);
+    const [animateWave, setAnimateWave] = useState(false);
 
     useEffect(() => {
         const fetchBalance = async () => {
@@ -27,6 +28,13 @@ const TokenBalance = ({ name, walletAddress }) => {
         fetchTokenAddress();
     }, [walletAddress, name, getBalance, getTokenAddress]);
 
+    const handleAnimateWave = () => {
+        setAnimateWave(true);
+        setTimeout(() => {
+            setAnimateWave(false);
+        }, 3000); // Час тривалості анімації, в мілісекундах
+    };
+
     return (
         
             <div className='flex mx-2 my-2'>
@@ -43,7 +51,8 @@ const TokenBalance = ({ name, walletAddress }) => {
                         onClick={() => {
                             navigator.clipboard.writeText(tokenAddress);
                             setCopyIcon({ icon: ClipboardCheckIcon });
-                            toast.success('Address copied to clipboard!');
+                            toast.success('Address copied to clipboard!', {className: "blue-glassmorphism-toast"});
+                            
                         }}
                     />
                 </div>
@@ -51,6 +60,8 @@ const TokenBalance = ({ name, walletAddress }) => {
                 {txPending && <TransactionStatus />}
 
                 <Toaster />
+
+                
             </div>
     );
 };

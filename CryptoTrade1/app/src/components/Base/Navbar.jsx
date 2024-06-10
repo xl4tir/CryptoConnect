@@ -9,6 +9,9 @@ import { EthersConnectContext } from "../../context/EthersConnectContext";
 import logo from "../../images/Logo.svg";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
+import { Toaster } from "react-hot-toast";
+import { FaRegUser } from "react-icons/fa";
+import { BiWallet } from "react-icons/bi";
 
 const NavBarItem = ({ title, classprops }) => (
   <li className={`mx-4 cursor-pointer ${classprops}`}>{title}</li>
@@ -24,8 +27,10 @@ const Navbar = () => {
   const { isLoggedIn, logout, user } = useContext(AuthContext);
   const { connectWallet, loading, disconnectWallet } = useContext(EthersConnectContext);
 
+
   return (
     <nav className="w-full flex lg:justify-center justify-between items-center p-4">
+      <Toaster></Toaster>
       <div className="mr-40 text-white flex flex-initial justify-center items-center flex-row">
         <img src={logo} alt="logo" className="w-10 cursor-pointer" />
         <p className="mx-4 tracking-wide text-xl font-bold">CryptoConnect</p>
@@ -43,7 +48,7 @@ const Navbar = () => {
           <>
             <Menu as="div" className="relative inline-block text-left">
               <div>
-                <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-full bg-transparent py-2 px-2 ml-4 border border-[#A90E8F] text-white hover:bg-[#A90E8F]">
+                <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-lg bg-transparent py-1 px-1 ml-3 border border-[#990036] text-white hover:bg-[#990036]">
                   Profile
 
                 </Menu.Button>
@@ -63,13 +68,13 @@ const Navbar = () => {
                     <Menu.Item>
                       {({ active }) => (
                         <Link
-                          to="/profile"
+                          to={`/profile/${user._id}`}
                           className={classNames(
                             active ? 'rounded-md bg-white/5 text-white' : 'text-white',
-                            'block px-4 py-2 text-sm'
+                            'block px-4 py-2 text-sm flex flex-row items-center gap-2'
                           )}
                         >
-                          Profile
+                          <FaRegUser /> My Page
                         </Link>
                       )}
                     </Menu.Item>
@@ -79,10 +84,10 @@ const Navbar = () => {
                           to={`/portfolio-tracker/${user._id}`}
                           className={classNames(
                             active ? 'rounded-md bg-white/5 text-white' : 'text-white',
-                            'block px-4 py-2 text-sm'
+                            'block px-4 py-2 text-sm flex flex-row items-center gap-2'
                           )}
                         >
-                          Portfolio
+                          <BiWallet /> Portfolio
                         </Link>
                       )}
                     </Menu.Item>
@@ -90,8 +95,8 @@ const Navbar = () => {
                 </Menu.Items>
               </Transition>
             </Menu>
-            <li className="bg-[#A90E8F] py-3 px-3 ml-8 rounded-full cursor-pointer hover:bg-[#930C7C]" onClick={disconnectWallet}>
-              <FiPower></FiPower>
+            <li className="bg-[#990036] py-2 px-2 ml-8 rounded-full cursor-pointer hover:bg-[#7C002C]" onClick={disconnectWallet}>
+              <FiPower style={{ strokeWidth: '2' }} size={20}></FiPower>
             </li>
           </>
         ) : (

@@ -26,11 +26,11 @@ const CommentListByUserId = ({ user_id }) => { // Заміна post_id на user
     }, [user_id]); // Додано updateTabs до залежностей ефекту
 
     if (loading) {
-        return <div className='flex max-w-screen-lg items-center justify-center w-screen m-auto'><Loader></Loader></div>;
+        return <div className='flex max-w-screen-md items-center justify-center w-screen m-auto'><Loader></Loader></div>;
     }
 
     return (
-        <div className="max-w-screen-lg flex w-screen justify-start flex-col ">
+        <div className="max-w-screen-md w-screen flex  justify-start flex-col ">
             {comments.map(comment => (
                 <div key={comment._id} className="flex max-w-screen-md  w-screen m-auto items-start flex-col ">
                     <div className="flex flex-row w-full">

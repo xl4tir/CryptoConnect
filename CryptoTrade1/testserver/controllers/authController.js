@@ -45,6 +45,28 @@ class AuthController {
       res.status(500).send({ message: 'Internal Server Error' });
     }
   }
+  
+  async getUserById(req, res) {
+    const userId = req.params.userId; // або req.query.userId, залежно від того, як ви передаєте id
+  
+    if (!req.session.userAddress) {
+      return res.status(401).send({ message: 'Unauthorized' });
+    }
+  
+    try {
+      const user = await User.findById(userId)
+        .select('-__v')
+        .populate('profile'); // додано заповнення профілю
+  
+      if (!user) {
+        return res.status(404).send({ message: 'User not found' });
+      }
+      res.status(200).send(user);
+    } catch (error) {
+      res.status(500).send({ message: 'Internal Server Error' });
+    }
+  }
+  
 
   async logout(req, res) {
     req.session.destroy((err) => {

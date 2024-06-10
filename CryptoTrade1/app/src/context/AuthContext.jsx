@@ -29,6 +29,7 @@ export const AuthProvider = ({ children }) => {
             setIsLoggedIn(true);
         } catch (error) {
             console.error('Login error', error);
+            window.location.reload();
         }
     };
 

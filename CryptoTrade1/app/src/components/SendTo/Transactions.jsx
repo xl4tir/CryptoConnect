@@ -11,10 +11,9 @@ const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword,
 
   return (
     <div className="bg-[#181918] m-4 flex flex-1
-
       min-w-[270px]
       max-w-[300px]
-      min-w-full
+      
       flex-col p-3 rounded-md hover:shadow-2xl"
     >
       <div className="flex flex-col items-center w-full mt-3">

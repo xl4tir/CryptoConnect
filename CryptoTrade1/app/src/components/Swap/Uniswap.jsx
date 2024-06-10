@@ -5,10 +5,11 @@ import TokenBalance from './TokenBalance';
 import AboutSwap from './AboutSwap';
 import { toast } from 'react-hot-toast';
 import Loader from "../Loader";
+import { IoArrowDown } from "react-icons/io5";
 
 const UniswapComponent = () => {
     const { account, getBalanceETH, getBalance, swapEthToToken, swapTokenToEth, swapTokenToToken, isLoading } = useWeb3();
-    const {connectWallet} = useContext(TransactionContext);
+    const { connectWallet } = useContext(TransactionContext);
     const [balance, setBalance] = useState({
         ETH: 0,
         CoinA: 0,
@@ -72,10 +73,10 @@ const UniswapComponent = () => {
             } else {
                 await swapTokenToToken(srcToken, destToken, inputAmount);
             }
-            toast.success('Swap successful!');
+            toast.success('Swap successful!', { className: "blue-glassmorphism-toast" });
         } catch (error) {
             console.error('Swap failed:', error);
-            toast.error('Swap failed!');
+            toast.error('Swap failed!', { className: "blue-glassmorphism-toast" });
         }
     };
 
@@ -83,7 +84,7 @@ const UniswapComponent = () => {
 
         <div>
             <div>
-                {account && (
+                {!account && (
                     <AboutSwap account={account} />
                 )}
             </div>
@@ -97,14 +98,14 @@ const UniswapComponent = () => {
                 </div>
             )}
 
-            <div className="flex justify-center py-14 ">
+            <div className="flex justify-center pt-10 pb-20 ">
 
-                <div className=' w-[35%] p-4 px-6 rounded-xl blue-glassmorphism'>
+                <div className=' max-w-md p-4 px-6 rounded-xl blue-glassmorphism'>
                     <div className='flex items-center justify-between py-4 px-1 text-white  font-semibold text-xl'>
                         <p>Swap</p>
 
                     </div>
-                    <label for="price" class="block text-sm leading-6 text-gray-300">
+                    <label for="price" class="block text-sm ml-2 leading-6 text-gray-300">
                         Balance: {isNaN(Number(balance[srcToken])) ? '0.000' : Number(balance[srcToken]).toFixed(3)} {srcToken}
                     </label>
                     <div className='relative white-glassmorphism  p-4 py-6 rounded-xl mb-2 border-[1px]  hover:border-zinc-600'>
@@ -141,21 +142,18 @@ const UniswapComponent = () => {
 
                     </div>
 
-                    <div className="flex justify-center mb-4">
+                    <div className="flex justify-center mb-2">
                         <button
                             onClick={handleSwapTokens}
-                            className="bg-blue-500 p-2 rounded-full text-white shadow-md"
+                            className="flex-row hover:text-white hover:bg-opacity-10 items-center text-white/70 shadow-sm shadow-gray-300 rounded-lg bg-white p-2 bg-opacity-5"
                         >
-                            ⇅
+                            <IoArrowDown size={30}></IoArrowDown>
                         </button>
                     </div>
 
-                    {account && (
-                        <label for="price" class="block text-sm leading-6 text-gray-300">
-                            Balance: {isNaN(Number(balance[destToken])) ? '0.000' : Number(balance[destToken]).toFixed(3)} {destToken}
-                        </label>)}
 
-                    <div className='relative white-glassmorphism  p-4 py-6 rounded-xl mb-2 border-[1px]  hover:border-zinc-600'>
+
+                    <div className='relative white-glassmorphism  p-4 py-6 rounded-xl  border-[1px]  hover:border-zinc-600'>
                         <div>
 
                             <div class="relative my-2 rounded-md shadow-sm">
@@ -179,9 +177,15 @@ const UniswapComponent = () => {
                                         <option value="CoinC">CoinC</option>
                                     </select>
                                 </div>
+
                             </div>
                         </div>
                     </div>
+                    {account && (
+                        <label for="price" class="block text-sm ml-2 mb-3 leading-6 text-gray-300">
+                            Balance: {isNaN(Number(balance[destToken])) ? '0.000' : Number(balance[destToken]).toFixed(3)} {destToken}
+                        </label>)}
+
                     {isLoading ? (
                         <Loader />
                     ) : (
@@ -189,7 +193,7 @@ const UniswapComponent = () => {
                             <button
                                 type="button"
                                 onClick={handleSwap}
-                                className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-xl cursor-pointer"
+                                className="text-white w-full mb-4 mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-xl cursor-pointer"
                             >
                                 Swap
                             </button>
@@ -197,7 +201,7 @@ const UniswapComponent = () => {
                             <button
                                 type="button"
                                 onClick={connectWallet}
-                                className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-xl cursor-pointer"
+                                className="text-white w-full mb-4 mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-xl cursor-pointer"
                             >
                                 Connect Wallet
                             </button>

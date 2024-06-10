@@ -88,3 +88,14 @@ export const uploadBackgroundPhoto = async (userId, background) => {
       throw error;
   }
 };
+
+
+export const getRecentUsers = async () => {
+  try {
+    const response = await api.get('/users/recent');
+    return response.data;
+  } catch (error) {
+    console.error('Помилка отримання останніх користувачів:', error);
+    throw error;
+  }
+};

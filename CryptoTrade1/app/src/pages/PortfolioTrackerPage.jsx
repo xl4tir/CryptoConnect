@@ -4,7 +4,7 @@ import PortfolioTracker from "../components/Portfolio/PortfolioTracker";
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-const PortfolioTrackerPage = (props) => {
+const PortfolioTrackerPage = () => {
     const { user_id } = useParams();
 
     return (

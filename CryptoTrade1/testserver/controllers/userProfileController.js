@@ -103,7 +103,20 @@ const userProfileController = {
       console.error('Помилка завантаження фонового зображення:', error);
       res.status(500).json({ message: 'Внутрішня помилка сервера' });
     }
+  },
+  getRecentUsers: async (req, res) => {
+    try {
+      const recentUsers = await UserProfile.find().sort({ registrationDate: -1 }).limit(10);
+      res.json(recentUsers);
+    } catch (error) {
+      console.error('Помилка отримання останніх користувачів:', error);
+      res.status(500).json({ message: 'Внутрішня помилка сервера' });
+    }
   }
+
 };
+
+
+
 
 module.exports = userProfileController;

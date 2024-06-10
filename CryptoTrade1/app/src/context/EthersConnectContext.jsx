@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState, useContext } from 'react';
 import { AuthContext } from './authContext';
 import { ethers } from 'ethers';
+import { toast } from 'react-hot-toast';
 
 export const EthersConnectContext= createContext();
 
@@ -17,6 +18,7 @@ export const EthersConnectProvider = ({ children }) => {
                 }
             } catch (error) {
                 console.error('Error checking MetaMask connection:', error);
+                window.location.reload();
             }
         };
 
@@ -32,11 +34,12 @@ export const EthersConnectProvider = ({ children }) => {
             setLoading(true);
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             await login(accounts[0]);
-            alert('Logged in successfully');
-            window.location.href = window.location.href
+            window.location.reload();
+            toast.success('Logged in successfully', {className: "blue-glassmorphism-toast"});
+          
         } catch (error) {
             console.error('Login error', error);
-            alert('Login failed');
+            toast.error('Login failed', {className: "blue-glassmorphism-toast"});
         } finally {
             setLoading(false);
         }
@@ -46,10 +49,10 @@ export const EthersConnectProvider = ({ children }) => {
         try {
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             await provider.disconnect();
-            alert('Disconnect successfully');
+            toast.success('Disconnect successfully', {className: "blue-glassmorphism-toast"});
         } catch (error) {
             console.error('Disconnect error', error);
-            alert('Disconnect failed');
+            toast.error('Disconnect failed', {className: "blue-glassmorphism-toast"});
         } finally {
             setLoading(false);
         }

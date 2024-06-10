@@ -156,7 +156,7 @@ export default function PortfolioTracker({ user_id }) { // Зміна назви
                                 }}
                                 key={portfolio.id} label={portfolio.name} {...a11yProps(index)} />
                         ))}
-                        <div className="flex w-full bg-white opacity-10 h-px my-4" />
+                        
                         {canEdit &&
                             <button className="text-pink-500 px-4  flex flex-row items-center  justify-start" onClick={() => setIsModalOpen(true)}>
                                 <p className="text-3xl mr-1 font-light">+</p>
@@ -167,6 +167,7 @@ export default function PortfolioTracker({ user_id }) { // Зміна назви
                             </button>
                         }
                     </Tabs>
+                    
                     {userPortfolios.map((portfolio, index) => (
                         <TabPanel
                             key={portfolio.id}
@@ -175,11 +176,12 @@ export default function PortfolioTracker({ user_id }) { // Зміна назви
                             className='text-white '
                             sx={{ width: 'xl', maxWidth: 'xl', minWidth: 'xl', padding: '0px' }}
                         >
-                            <div>
+                           
                                 <PortfolioMain portfolio={portfolio} coins={coins} updatePortfolios={updatePortfolios} />
-                            </div>
+                            
                         </TabPanel>
                     ))}
+                    
                 </Box>
             )}
 

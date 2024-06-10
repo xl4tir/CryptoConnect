@@ -128,7 +128,7 @@ const ProfileForm = ({ onSubmit, initialData, isEditing }) => {
                                 name="profilePhoto"
                                 onChange={handleProfilePhotoChange}
                                 id="profilePhoto"
-                                accept=".png, .jpg, .jpeg"
+                                accept=".png, .jpg, .jpeg, .webp"
                                 className="hidden"
                             />
                         </label>
@@ -152,7 +152,7 @@ const ProfileForm = ({ onSubmit, initialData, isEditing }) => {
                                 name="backgroundPhoto"
                                 onChange={handleBackgroundPhotoChange}
                                 id="backgroundPhoto"
-                                accept=".png, .jpg, .jpeg"
+                                accept=".png, .jpg, .jpeg, .webp"
                                 className="hidden"
                             />
                         </label>

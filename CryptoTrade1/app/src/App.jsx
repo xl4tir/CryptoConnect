@@ -1,4 +1,4 @@
-import {BrowserRouter as Router, Routes, Route  } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SendToPage from "./pages/SendToPage";
 import Market from "./pages/Market";
 
@@ -14,17 +14,20 @@ import TestAuth from "./pages/TestAuth"
 const App = () => (
 
     <Router>
-      <Routes>
+        <Routes>
 
-          <Route path="/testauth" element={<TestAuth />} exact />
-        
-          <Route path="/sendTo" element={<SendToPage />} exact />
-          <Route path="/swap" element={<SwapPage />} exact />
-          <Route path="/" element={<SendToPage />} exact />
-          <Route path="/market" element={<Market />} exact />
+            <Route path="/testauth" element={<TestAuth />} exact />
 
-          <Route path="/profile" element={<ProfilePage />} exact />
-          <Route
+            <Route path="/sendTo" element={<SendToPage />} exact />
+            <Route path="/swap" element={<SwapPage />} exact />
+            <Route path="/" element={<SendToPage />} exact />
+            <Route path="/market" element={<Market />} exact />
+
+            <Route
+                path="/profile/:user_id"
+                element={<ProfilePage />}
+                xact />
+            <Route
                 path="/portfolio-tracker/:user_id"
                 element={<PortfolioTrackerPage />}
                 exact
@@ -34,11 +37,11 @@ const App = () => (
                 element={<PublicationPage />}
                 exact
             />
-        
-      </Routes>
+
+        </Routes>
     </Router>
 
-  
+
 );
 
 export default App;

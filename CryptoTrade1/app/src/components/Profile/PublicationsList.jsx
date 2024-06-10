@@ -7,9 +7,10 @@ import { getPostsByUserId, createPost, createRepost } from '../../services/postS
 import { getUserProfilePhotoURL } from '../../services/userProfileService';
 import { createComment } from '../../services/commentsService'; 
 import Loader from '../Loader';
+import { Toaster, toast } from 'react-hot-toast';
 
 
-const PublicationsList = ({ user }) => {
+const PublicationsList = ({ user, currentUser }) => {
   const navigate = useNavigate();
   const [isModalCommentOpen, setIsModalCommentOpen] = useState(false);
   const [isModalPostOpen, setIsModalPostOpen] = useState(false);
@@ -80,9 +81,11 @@ const PublicationsList = ({ user }) => {
       const data = await getPostsByUserId(user._id);
       setPublications(data);
       setIsModalRepostOpen(false);
+      toast.success('Repost created successfully!', { className: 'blue-glassmorphism-toast' });
     } catch (error) {
       console.error('Error reposting:', error);
       setError('Failed to repost');
+      toast.error('Failed to repost. Please try again later.', { className: 'blue-glassmorphism-toast' });
     }
   };
 
@@ -94,7 +97,9 @@ const PublicationsList = ({ user }) => {
       setPublications(data);
       setIsModalPostOpen(false);
       setNewPostText('');
+      toast.success('Post created successfully!', { className: 'blue-glassmorphism-toast' });
     } catch (error) {
+      toast.error('Failed to create post. Please try again later.', { className: 'blue-glassmorphism-toast' });
       console.error('Error creating post:', error);
       setError('Failed to create post');
     }
@@ -108,9 +113,11 @@ const PublicationsList = ({ user }) => {
       };
       await createComment(commentData);
       setIsModalCommentOpen(false);
+      toast.success('Comment created successfully!', { className: 'blue-glassmorphism-toast' });
     } catch (error) {
       console.error('Error creating comment:', error);
       setError('Failed to create comment');
+      toast.error('Failed to create comment. Please try again later.', { className: 'blue-glassmorphism-toast' });
     }
   };
 
@@ -150,7 +157,8 @@ const PublicationsList = ({ user }) => {
   }
 
   return (
-    <div className="max-w-screen-lg flex w-screen justify-start flex-col">
+    <div className="max-w-screen-md flex w-screen justify-start flex-col">
+      <Toaster></Toaster>
       {publications.map((publication, index) => (
         <div key={index} className="flex items-start flex-col">
           <div className="flex flex-row w-full">
@@ -245,14 +253,15 @@ const PublicationsList = ({ user }) => {
       ))}
 
       <div
-        className="flex max-w-screen-lg w-full flex-row-reverse bottom-20 fixed z-50 "
+        className="flex max-w-screen-md w-full flex-row-reverse bottom-20 fixed z-40 "
       >
         <div className="flex items-center rounded-full bg-blue-600 hover:bg-blue-700 mr-20 flex-row justify-end flex-wrap-reverse items-center cursor-pointer ">
-
+        {user._id === currentUser._id && (
           <svg onClick={() => setIsModalPostOpen(true)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="white"
             className="size-10 m-2">
             <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
           </svg>
+          )}
 
         </div>
       </div>
@@ -263,7 +272,7 @@ const PublicationsList = ({ user }) => {
         publication={selectedRepost}
         newPostText={newPostText}
         onNewPostTextChange={setNewPostText}
-        user={user}
+        user={currentUser}
         formatDate={formatDate}
       />
 
@@ -274,7 +283,7 @@ const PublicationsList = ({ user }) => {
         onSubmitPost={handleSubmitPost}
         newPostText={newPostText}
         onNewPostTextChange={setNewPostText}
-        user={user}
+        user={currentUser}
       />
 
       <CommentModal
@@ -284,7 +293,7 @@ const PublicationsList = ({ user }) => {
         publication={selectedPublication}
         newCommentText={newCommentText}
         onNewCommentTextChange = {setNewCommentText}
-        user={user}
+        user={currentUser}
         formatDate={formatDate}
         
       />

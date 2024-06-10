@@ -7,6 +7,8 @@ router.get('/profile/:userId', authMiddleware, userProfileController.getUserProf
 router.post('/profile', authMiddleware, userProfileController.createUserProfile);
 router.put('/profile/:userId', authMiddleware, userProfileController.updateUserProfile);
 router.delete('/profile/:userId', authMiddleware, userProfileController.deleteUserProfile);
+router.get('/users/recent', authMiddleware, userProfileController.getRecentUsers); 
+
 
 router.post('/profile/photo/:userId', authMiddleware, uploadMiddleware.single('photo'), userProfileController.uploadProfilePhoto);
 router.post('/profile/background/:userId', authMiddleware, uploadMiddleware.single('background'), userProfileController.uploadBackgroundPhoto);

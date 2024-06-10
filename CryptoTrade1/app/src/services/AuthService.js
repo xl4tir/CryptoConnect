@@ -14,8 +14,18 @@ const getCurrentUser = async () => {
     return await axios.get(`${API_URL}/me`, { withCredentials: true });
 };
 
+const getUserById = async (userId) => {
+    try {
+        const response = await axios.get(`${API_URL}/users/${userId}`, { withCredentials: true });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export default {
     login,
     logout,
-    getCurrentUser
+    getCurrentUser,
+    getUserById
 };

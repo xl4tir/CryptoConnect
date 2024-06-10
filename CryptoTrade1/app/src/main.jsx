@@ -8,19 +8,21 @@ import { AuthProvider } from './context/authContext.jsx';
 import { EthersConnectProvider } from './context/EthersConnectContext.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <TransactionProvider>
-    <UniswapProvider>
-      <AuthProvider>
-        <EthersConnectProvider>
 
-          <React.StrictMode>
+    <TransactionProvider>
+      <UniswapProvider>
+        <AuthProvider>
+          <EthersConnectProvider>
 
-            <App />
+            <React.StrictMode>
 
-          </React.StrictMode>
+              <App />
 
-        </EthersConnectProvider>
-      </AuthProvider>
-    </UniswapProvider>
-  </TransactionProvider>
+            </React.StrictMode>
+
+          </EthersConnectProvider>
+        </AuthProvider>
+      </UniswapProvider>
+    </TransactionProvider>
+
 )
