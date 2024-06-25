@@ -12,7 +12,9 @@ const userProfileSchema = new mongoose.Schema({
   favoriteCategories: [{ type: String }],
   registrationDate: { type: Date, default: Date.now },
   profilePhoto: { type: String },
-  backgroundPhoto: { type: String } 
+  backgroundPhoto: { type: String },
+  followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UserProfile' }],
+  following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UserProfile' }]
 });
 
 const UserProfile = mongoose.model('UserProfile', userProfileSchema);

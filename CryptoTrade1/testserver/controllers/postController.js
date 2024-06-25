@@ -3,29 +3,31 @@ const Post = require('../models/post');
 // Додавання нового посту
 exports.createPost = async (req, res) => {
     try {
-      const userId = req.session.userId; 
-      const { content } = req.body;
-  
-      if (!userId) {
-        return res.status(401).json({ message: 'Unauthorized' });
-      }
-  
-      const newPost = new Post({
-        user_id: userId,
-        content,
-        created_at: new Date(),
-      });
-  
-      await newPost.save();
-  
-      res.status(201).json(newPost);
-    } catch (error) {
-      console.error('Error creating post:', error);
-      res.status(500).json({ message: 'Internal server error' });
-    }
-  };
+        const userId = req.session.userId;
+        const { content, crypto_symbol } = req.body;
 
-// Отримання всіх постів
+        if (!userId) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+
+        const newPost = new Post({
+            user_id: userId,
+            content,
+            crypto_symbol: crypto_symbol || '',
+            created_at: new Date(),
+        });
+
+        await newPost.save();
+
+        res.status(201).json(newPost);
+    } catch (error) {
+        console.error('Error creating post:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+
+
 exports.getAllPosts = async (req, res) => {
     try {
         const posts = await Post.find().populate({
@@ -122,14 +124,14 @@ exports.createRepost = async (req, res) => {
     try {
         const { postId } = req.params;
         const { content } = req.body;
-        const user_id = req.session.userId; 
-        
+        const user_id = req.session.userId;
+
         // Знаходимо оригінальний пост
         const originalPost = await Post.findById(postId);
         if (!originalPost) {
             return res.status(404).json({ error: 'Original post not found' });
         }
-        
+
         const repost = new Post({
             user_id,
             content: content || "none",
@@ -137,7 +139,7 @@ exports.createRepost = async (req, res) => {
         });
 
         await repost.save();
-        
+
         // Додаємо репост до оригінального поста
         originalPost.reposts.push(repost._id);
         await originalPost.save();
@@ -154,7 +156,19 @@ exports.createRepost = async (req, res) => {
 exports.getRepostsByPostId = async (req, res) => {
     try {
         const { postId } = req.params;
-        const post = await Post.findById(postId).populate('reposts');
+        const post = await Post.findById(postId)
+            .populate({
+                path: 'reposts',
+                populate: {
+                    path: 'user_id',
+                    model: 'User',
+                    populate: {
+                        path: 'profile',
+                        model: 'UserProfile',
+                        select: 'username profilePhoto'
+                    }
+                }
+            });
         if (!post) {
             return res.status(404).json({ error: 'Post not found' });
         }
@@ -210,43 +224,97 @@ exports.getPostsAndRepostsByUserId = async (req, res) => {
 
 exports.getPostsByUserId = async (req, res) => {
     try {
-      const posts = await Post.find({ user_id: req.params.userId })
-        .populate({
-          path: 'user_id',
-          populate: {
-            path: 'profile',
-            model: 'UserProfile',
-            select: '_id name username profilePhoto'
-          }
-        })
-        .populate({
-          path: 'original_post',
-          model: 'Post',
-          populate: [
-            {
-              path: 'user_id',
-              model: 'User',
-              populate: {
-                path: 'profile',
-                model: 'UserProfile',
-                select: '_id name username profilePhoto'
-              }
-            },
-            {
-              path: 'comments',
-              model: 'Comment'
-            },
-            {
-              path: 'reactions',
-              model: 'Reaction'
-            }
-          ]
-        })
-        .sort({ created_at: -1 }); // Сортування за спаданням за датою
-      res.json(posts);
+        const posts = await Post.find({ user_id: req.params.userId })
+            .populate({
+                path: 'user_id',
+                populate: {
+                    path: 'profile',
+                    model: 'UserProfile',
+                    select: '_id name username profilePhoto'
+                }
+            })
+            .populate({
+                path: 'original_post',
+                model: 'Post',
+                populate: [
+                    {
+                        path: 'user_id',
+                        model: 'User',
+                        populate: {
+                            path: 'profile',
+                            model: 'UserProfile',
+                            select: '_id name username profilePhoto'
+                        }
+                    },
+                    {
+                        path: 'comments',
+                        model: 'Comment'
+                    },
+                    {
+                        path: 'reactions',
+                        model: 'Reaction'
+                    }
+                ]
+            })
+            .sort({ created_at: -1 }); // Сортування за спаданням за датою
+        res.json(posts);
     } catch (error) {
-      console.error('Error fetching user posts:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+        console.error('Error fetching user posts:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
-  };
-  
+};
+
+exports.getPostsByCryptoSymbol = async (req, res) => {
+    try {
+        const { crypto_symbol } = req.params;
+        const posts = await Post.find({ crypto_symbol })
+            .populate({
+                path: 'user_id',
+                populate: {
+                    path: 'profile',
+                    model: 'UserProfile',
+                    select: '_id name username profilePhoto'
+                }
+            })
+            .populate({
+                path: 'original_post',
+                model: 'Post',
+                populate: [
+                    {
+                        path: 'user_id',
+                        model: 'User',
+                        populate: {
+                            path: 'profile',
+                            model: 'UserProfile',
+                            select: '_id name username profilePhoto'
+                        }
+                    },
+                    {
+                        path: 'comments',
+                        model: 'Comment'
+                    },
+                    {
+                        path: 'reactions',
+                        model: 'Reaction'
+                    }
+                ]
+            })
+            .sort({ created_at: -1 });
+
+        res.status(200).json(posts);
+    } catch (error) {
+        console.error('Error fetching posts:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+exports.incrementViewCount = async (req, res, next) => {
+    try {
+        const postId = req.params.id;
+        await Post.findByIdAndUpdate(postId, { $inc: { view_count: 0.5 } });
+        next();
+    } catch (error) {
+        console.error('Error incrementing view count:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};

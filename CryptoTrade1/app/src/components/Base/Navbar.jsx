@@ -36,7 +36,7 @@ const Navbar = () => {
         <p className="mx-4 tracking-wide text-xl font-bold">CryptoConnect</p>
       </div>
       <ul className="text-white lg:flex hidden list-none flex-row justify-between items-center flex-initial">
-        {["Market", "SendTo", "Swap"].map((item, index) => (
+        {[ "SendTo", "Swap", "Market"].map((item, index) => (
           <li key={item + index}>
             <Link to={`/${item.toLowerCase()}`} className="text-white m-4 hover:text-gray-300">
               {item}

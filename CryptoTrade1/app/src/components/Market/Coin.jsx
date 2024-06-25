@@ -1,8 +1,10 @@
 import React from 'react';
-import greenTriangle from "../../images/green.svg";
-import redTriangle from "../../images/red.svg";
+import { useNavigate } from 'react-router-dom';
+import greenTriangle from '../../images/green.svg';
+import redTriangle from '../../images/red.svg';
 
 const Coin = ({
+  id,
   name,
   price,
   symbol,
@@ -11,9 +13,15 @@ const Coin = ({
   image,
   priceChange
 }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/coin-info/${id}`);
+  };
+
   return (
-    <div className='coin-container'>
-      <div className='coin-row'>
+    <div className='coin-container cursor-pointer hover:bg-white/5 px-3 rounded-md' onClick={handleClick}>
+      <div className='coin-row '>
         <div className='coin'>
           <img src={image} alt='crypto' />
           <h1>{name}</h1>

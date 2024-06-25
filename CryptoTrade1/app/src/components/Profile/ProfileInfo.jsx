@@ -1,27 +1,57 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { getUserProfilePhotoURL } from '../../services/userProfileService';
 import { FiChevronDown } from 'react-icons/fi';
 import { AiOutlineDelete } from "react-icons/ai";
 import { Link } from 'react-router-dom';
+import { followUser, unfollowUser } from '../../services/followService';
+import { AuthContext } from '../../context/authContext';
+import { Toaster, toast } from 'react-hot-toast';
 
 const ProfileInfo = ({ userProfile, onEdit, onDelete, isOwner }) => {
+  const { user } = useContext(AuthContext);
   const [showMoreInfo, setShowMoreInfo] = useState(false);
   const [profilePhotoURL, setProfilePhotoURL] = useState('');
   const [backgroundPhotoURL, setBackgroundPhotoURL] = useState('');
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followersCount, setFollowersCount] = useState(userProfile.followers.length);
+  const [followingCount, setFollowingCount] = useState(userProfile.following.length);
 
   useEffect(() => {
     setProfilePhotoURL(getUserProfilePhotoURL(userProfile.profilePhoto));
     setBackgroundPhotoURL(getUserProfilePhotoURL(userProfile.backgroundPhoto));
-  }, [userProfile]);
+    setIsFollowing(userProfile.followers.includes(user.profile._id));
+  }, [userProfile, user.profile._id]);
 
-  // Функція для перетворення дати з ISO 8601 в формат "рік Місяць"
+  const handleFollow = async () => {
+    try {
+      await followUser(userProfile._id);
+      setIsFollowing(true);
+      setFollowersCount(prevCount => prevCount + 1);
+      toast.success('Followed successfully!', { className: "blue-glassmorphism-toast" });
+    } catch (error) {
+      console.error('Error following user:', error);
+      toast.error('Error following user.', { className: "blue-glassmorphism-toast" });
+    }
+  };
+
+  const handleUnfollow = async () => {
+    try {
+      await unfollowUser(userProfile._id);
+      setIsFollowing(false);
+      setFollowersCount(prevCount => prevCount - 1);
+      toast.success('Unfollowed successfully!', { className: "blue-glassmorphism-toast" });
+    } catch (error) {
+      console.error('Error unfollowing user:', error);
+      toast.error('Error unfollowing user.', { className: "blue-glassmorphism-toast" });
+    }
+  };
+
   const formatRegistrationDate = (isoDate) => {
     const dateObj = new Date(isoDate);
     const year = dateObj.getFullYear();
     const month = dateObj.toLocaleString('en-US', { month: 'long' });
     return `${year} ${month}`;
   };
-
   return (
     <div className="max-w-screen-lg flex w-full flex-1 pt-10 px-10 justify-around items-center flex-col sm:flex-row">
       <div className="flex w-full justify-start flex-col ">
@@ -44,7 +74,7 @@ const ProfileInfo = ({ userProfile, onEdit, onDelete, isOwner }) => {
               @{userProfile.username}
             </p>
             <p className="text-left mt-2 text-white text-sm font-light md:w-9/12 w-11/12 ">
-              <b className="font-medium"> 10 </b> Following <b className="font-medium ml-2"> 3 </b> Followers
+              <b className="font-medium"> {followingCount} </b> Following <b className="font-medium ml-2"> {followersCount} </b> Followers
             </p>
           </div>
           {isOwner ? (
@@ -63,12 +93,29 @@ const ProfileInfo = ({ userProfile, onEdit, onDelete, isOwner }) => {
                 justify-between gap-2 items-center border border-red-600' size={35} />
             </>
           ) : (
-            <Link 
-              to={`/portfolio-tracker/${userProfile._id}`} 
-              className="ml-2 py-2 px-4 h-10 w-auto bg-inherit text-sm text-white rounded-md hover:bg-blue-600 flex border-solid justify-between gap-2 items-center border border-blue-600"
-            >
-              Portfolio
-            </Link>
+            <>
+              {isFollowing ? (
+                <button
+                  onClick={handleUnfollow}
+                  className="ml-2 py-2 px-4 h-10 w-auto bg-inherit text-sm text-white rounded-md hover:bg-red-600 flex border-solid justify-between gap-2 items-center border border-red-600"
+                >
+                  Unfollow
+                </button>
+              ) : (
+                <button
+                  onClick={handleFollow}
+                  className="ml-2 py-2 px-4 h-10 w-auto bg-inherit text-sm text-white rounded-md hover:bg-blue-600 flex border-solid justify-between gap-2 items-center border border-blue-600"
+                >
+                  Follow
+                </button>
+              )}
+              <Link 
+                to={`/portfolio-tracker/${userProfile._id}`} 
+                className="ml-2 py-2 px-4 h-10 w-auto  text-sm text-white rounded-md bg-blue-600 hover:bg-blue-700 flex border-solid justify-between gap-2 items-center border border-blue-600"
+              >
+                Portfolio
+              </Link>
+            </>
           )}
         </div>
         <div className='flex  mt-8 justify-start'>

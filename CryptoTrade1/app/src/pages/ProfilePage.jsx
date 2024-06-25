@@ -12,13 +12,13 @@ const ProfilePage = () => {
   return (
     <div className="min-h-screen flex flex-col gradient-bg-main">
       <Navbar />
-      <div className="flex flex-grow  justify-center p-4">
+      <div className="flex flex-grow justify-center p-4">
         <div className="flex flex-grow max-w-screen-xl">
           <CommunitySidebarNav />
           <div className="flex-grow mx-8">
-            <Profile user_id={user_id} />
+            <Profile key={user_id} user_id={user_id} />
           </div>
-          <CommunityRightSidebar user_id={user_id}/>
+          <CommunityRightSidebar user_id={user_id} />
         </div>
       </div>
       <Footer />

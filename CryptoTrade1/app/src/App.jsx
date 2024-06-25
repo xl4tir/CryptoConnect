@@ -9,6 +9,7 @@ import PortfolioTrackerPage from './pages/PortfolioTrackerPage';
 import React from 'react';
 import SwapPage from "./pages/SwapPage";
 import TestAuth from "./pages/TestAuth"
+import CoinInfoPage from "./pages/CoinInfoPage"
 
 
 const App = () => (
@@ -35,6 +36,12 @@ const App = () => (
             <Route
                 path="/publications/:id"
                 element={<PublicationPage />}
+                exact
+            />
+
+            <Route
+                path="/coin-info/:id"
+                element={<CoinInfoPage />}
                 exact
             />
 

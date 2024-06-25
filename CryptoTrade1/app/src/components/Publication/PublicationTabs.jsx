@@ -5,6 +5,7 @@ import TabContext from '@mui/lab/TabContext';
 import Tabs from '@mui/material/Tabs';
 import TabPanel from '@mui/lab/TabPanel';
 import CommentList from './CommentList';
+import RepostList from './RepostList'; // Import RepostList
 import Loader from '../Loader';
 
 export default function PublicationTabs({ post_id, updateTabs, setUpdateTabs }) {
@@ -23,19 +24,17 @@ export default function PublicationTabs({ post_id, updateTabs, setUpdateTabs }) 
           textColor="inherit"
           indicatorColor="secondary"
           aria-label="secondary tabs example"
-
         >
           <Tab sx={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px', textTransform: 'none' }} value="comments" label="Comments" />
           <Tab sx={{ fontFamily: 'Montserrat, sans-serif', fontSize: '14px', textTransform: 'none' }} value="reposts" label="Reposts" />
         </Tabs>
         <div className="flex w-full bg-white opacity-10 h-px " />
       </Box>
-      <TabPanel sx={{ width: '100%', padding: '24px 0 24px 0' }} className='text-white' value="comments" >
+      <TabPanel sx={{ width: '100%', padding: '24px 0 24px 0' }} className='text-white' value="comments">
         <CommentList post_id={post_id} updateTabs={updateTabs} setUpdateTabs={setUpdateTabs} />
       </TabPanel>
       <TabPanel sx={{ width: '100%', padding: '24px 0 24px 0' }} className='text-white' value="reposts">
-        <div className=' m-auto'><Loader></Loader></div>
-
+        <RepostList post_id={post_id} updateTabs={updateTabs} setUpdateTabs={setUpdateTabs} /> {/* Add RepostList */}
       </TabPanel>
     </TabContext>
   );

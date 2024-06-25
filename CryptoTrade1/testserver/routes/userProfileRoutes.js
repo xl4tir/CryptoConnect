@@ -13,4 +13,8 @@ router.get('/users/recent', authMiddleware, userProfileController.getRecentUsers
 router.post('/profile/photo/:userId', authMiddleware, uploadMiddleware.single('photo'), userProfileController.uploadProfilePhoto);
 router.post('/profile/background/:userId', authMiddleware, uploadMiddleware.single('background'), userProfileController.uploadBackgroundPhoto);
 
+
+
+
+
 module.exports = router;

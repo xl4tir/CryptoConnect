@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const PostSchema = new Schema({
     user_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     content: { type: String, required: true },
+    crypto_symbol: { type: String, default: '' },
     created_at: { type: Date, default: Date.now },
     view_count: { type: Number, default: 0 },
     comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],

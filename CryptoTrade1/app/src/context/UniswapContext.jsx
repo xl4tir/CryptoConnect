@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { ethers } from 'ethers';
-import { contractABI_Uniswap, contractAddress_Uniswap, contractABI_CustomToken } from '../utils/constants'; 
+import { contractABI_Uniswap, contractAddress_Uniswap, contractABI_CustomToken } from '../utils/constants';
+import { Toaster, toast } from 'react-hot-toast';
 
 const UniswapContext = createContext();
 
@@ -11,7 +12,7 @@ export const UniswapProvider = ({ children }) => {
     const [uniswapContract, setUniswapContract] = useState(null);
     const [tokenContracts, setTokenContracts] = useState({});
     const [isLoading, setIsLoading] = useState(false);
-    const uniswapContractAddress = contractAddress_Uniswap; 
+    const uniswapContractAddress = contractAddress_Uniswap;
     const uniswapContractABI = contractABI_Uniswap
 
     const customTokenABI = contractABI_CustomToken;
@@ -58,39 +59,74 @@ export const UniswapProvider = ({ children }) => {
     };
 
     const swapEthToToken = async (tokenName, ethAmount) => {
-        if (uniswapContract && account) {
-            setIsLoading(true);
-            const tx = await uniswapContract.swapEthToToken(tokenName, { value: ethers.utils.parseEther(ethAmount) });
-            await tx.wait();
+        try {
+            if (uniswapContract && account) {
+                setIsLoading(true);
+                const tx = await uniswapContract.swapEthToToken(tokenName, { value: ethers.utils.parseEther(ethAmount) });
+                await tx.wait();
+                setIsLoading(false);
+                toast.success('Swap successful!', { className: "blue-glassmorphism-toast" });
+            } else {
+                throw new Error('Uniswap contract or account not connected');
+            }
+        } catch (error) {
+            toast.error('Swap failed!', { className: "blue-glassmorphism-toast" });
+            console.error('Error swapping ETH to token:', error);
+
+        } finally {
             setIsLoading(false);
         }
     };
 
     const swapTokenToEth = async (tokenName, tokenAmount) => {
-        if (uniswapContract && account) {
-            setIsLoading(true);
-            const amountInWei = ethers.utils.parseEther(tokenAmount);
-            const tokenContract = tokenContracts[tokenName];
-            const approveTx = await tokenContract.approve(uniswapContractAddress, amountInWei);
-            await approveTx.wait();
-            const tx = await uniswapContract.swapTokenToEth(tokenName, amountInWei);
-            await tx.wait();
+        try {
+            if (uniswapContract && account) {
+                setIsLoading(true);
+                const amountInWei = ethers.utils.parseEther(tokenAmount);
+                const tokenContract = tokenContracts[tokenName];
+                const approveTx = await tokenContract.approve(uniswapContractAddress, amountInWei);
+                await approveTx.wait();
+                const tx = await uniswapContract.swapTokenToEth(tokenName, amountInWei);
+                await tx.wait();
+                setIsLoading(false);
+                toast.success('Swap successful!', { className: "blue-glassmorphism-toast" });
+            } else {
+                throw new Error('Uniswap contract or account not connected');
+            }
+        } catch (error) {
+            toast.error('Swap failed!', { className: "blue-glassmorphism-toast" });
+            console.error('Error swapping token to ETH:', error);
+
+        } finally {
             setIsLoading(false);
         }
     };
 
     const swapTokenToToken = async (srcTokenName, destTokenName, tokenAmount) => {
-        if (uniswapContract && account) {
-            setIsLoading(true);
-            const amountInWei = ethers.utils.parseEther(tokenAmount);
-            const tokenContract = tokenContracts[srcTokenName];
-            const approveTx = await tokenContract.approve(uniswapContractAddress, amountInWei);
-            await approveTx.wait();
-            const tx = await uniswapContract.swapTokenToToken(srcTokenName, destTokenName, amountInWei);
-            await tx.wait();
+        try {
+            if (uniswapContract && account) {
+                setIsLoading(true);
+                const amountInWei = ethers.utils.parseEther(tokenAmount);
+                const tokenContract = tokenContracts[srcTokenName];
+                const approveTx = await tokenContract.approve(uniswapContractAddress, amountInWei);
+                await approveTx.wait();
+                const tx = await uniswapContract.swapTokenToToken(srcTokenName, destTokenName, amountInWei);
+                await tx.wait();
+                setIsLoading(false);
+                toast.success('Swap successful!', { className: "blue-glassmorphism-toast" });
+            } else {
+                
+                throw new Error('Uniswap contract or account not connected');
+            }
+        } catch (error) {
+            toast.error('Swap failed!', { className: "blue-glassmorphism-toast" });
+            console.error('Error swapping token to token:', error);
+
+        } finally {
             setIsLoading(false);
         }
     };
+
 
     const getTokenAddress = async (tokenName) => {
         if (uniswapContract) {
@@ -100,8 +136,9 @@ export const UniswapProvider = ({ children }) => {
     };
 
     return (
-        <UniswapContext.Provider value={{ provider, signer, account,getBalanceETH, getTokenAddress, getBalance, swapEthToToken, swapTokenToEth, swapTokenToToken, isLoading}}>
+        <UniswapContext.Provider value={{ provider, signer, account, getBalanceETH, getTokenAddress, getBalance, swapEthToToken, swapTokenToEth, swapTokenToToken, isLoading }}>
             {children}
+
         </UniswapContext.Provider>
     );
 };

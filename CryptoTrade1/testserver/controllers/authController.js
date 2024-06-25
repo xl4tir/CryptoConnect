@@ -16,7 +16,7 @@ class AuthController {
       }
 
       req.session.userAddress = user.userAddress;
-      req.session.userId = user._id; // Додано userId в сесію
+      req.session.userId = user._id; 
       req.session.save();
 
       res.status(200).send({ message: 'Logged in successfully' });

@@ -5,4 +5,36 @@ hardhat.config.js
 artifacts/
 cache/
 test/
+server/
 cryptrade swap/
+CryptoTrade1/testserver/public/tokenimg/1inch.webp
+CryptoTrade1/testserver/public/tokenimg/aave.webp
+CryptoTrade1/testserver/public/tokenimg/ach.webp
+CryptoTrade1/testserver/public/tokenimg/ankr.webp
+CryptoTrade1/testserver/public/tokenimg/avax.webp
+CryptoTrade1/testserver/public/tokenimg/dai.svg
+CryptoTrade1/testserver/public/tokenimg/eth.png
+CryptoTrade1/testserver/public/tokenimg/grt.webp
+CryptoTrade1/testserver/public/tokenimg/link.png
+CryptoTrade1/testserver/public/tokenimg/matic.webp
+CryptoTrade1/testserver/public/tokenimg/n2dr.png
+CryptoTrade1/testserver/public/tokenimg/shibainu.webp
+CryptoTrade1/testserver/public/tokenimg/sushi.webp
+CryptoTrade1/testserver/public/tokenimg/uni.png
+CryptoTrade1/testserver/public/tokenimg/usdc.png
+CryptoTrade1/testserver/public/tokenimg/usdt.png
+CryptoTrade1/testserver/public/tokenimg/wbtc.webp
+CryptoTrade1/testserver/public/tokenimg/weth.webp
+CryptoTrade1/testserver/public/tokenimg/wMatic.webp
+CryptoTrade1/testserver/public/tokenimg/zrx.png
+CryptoTrade1/testserver/uploads/├Р┬Ч├Р┬╜N╠Г┬Ц├Р┬╝├Р┬╛├Р┬║ ├Р┬╡├Р┬║N╠Г┬А├Р┬░├Р┬╜├Р┬░ 2023-03-24 ├Р┬╛ 20.50.25.png
+CryptoTrade1/testserver/uploads/1500x500 (1).jpeg
+CryptoTrade1/testserver/uploads/1500x500 (2).jpeg
+CryptoTrade1/testserver/uploads/1500x500.jpeg
+CryptoTrade1/testserver/uploads/background.png
+CryptoTrade1/testserver/uploads/digital-cryptocurrency-block-chain-market-600nw-1939827760.webp
+CryptoTrade1/testserver/uploads/irGG3-CU_400x400.jpg
+CryptoTrade1/testserver/uploads/logo.jpg
+CryptoTrade1/testserver/uploads/photo_2024-06-11 10.50.35.jpeg
+CryptoTrade1/testserver/uploads/TN1kjqdU_400x400.jpg
+CryptoTrade1/testserver/uploads/U09E_Ohc_400x400.jpg

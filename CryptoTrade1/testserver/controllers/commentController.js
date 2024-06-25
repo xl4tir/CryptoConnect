@@ -2,6 +2,7 @@ const Comment = require('../models/comment');
 const Post = require('../models/post');
 
 // Додавання нового коментаря
+
 exports.createComment = async (req, res) => {
     try {
         const user_id = req.session.userId;

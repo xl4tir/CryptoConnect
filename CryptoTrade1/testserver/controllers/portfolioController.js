@@ -34,6 +34,20 @@ exports.getPortfolioTransactions = async (req, res) => {
     }
 };
 
+exports.getTransactionsByCryptocurrency = async (req, res) => {
+    try {
+        const { portfolio_id } = req.params;
+        const { cryptocurrency } = req.query;  // Get cryptocurrency from query parameters
+        
+        const transactions = await Transaction.find({ portfolio_id, cryptocurrency });
+        
+        res.status(200).json(transactions);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+
 exports.updatePortfolio = async (req, res) => {
     try {
         const { portfolio_id } = req.params;

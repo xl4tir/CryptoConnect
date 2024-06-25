@@ -7,6 +7,78 @@
   box-sizing: border-box;
 }
 
+/* styles.css */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-custom::-webkit-scrollbar {
+  width: 5px;
+  cursor: pointer;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  opacity: 100%;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
+
+
+/* ::-webkit-scrollbar {
+  width: 5px;
+  cursor: pointer;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  opacity: 100%;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+} */
+
+
+.toast-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background-color: rgb(34, 137, 255);
+  border-radius: 50%;
+  color: white;
+  font-size: 18px;
+}
+
 body {
   margin: 0;
   font-family: "Montserrat", sans-serif !important;
@@ -168,6 +240,7 @@ body {
   justify-content: flex-start;
   align-items: center;
   height: 55px;
+  
   border-bottom: 1px solid #666666;
   width: 900px;
   color: #fff;

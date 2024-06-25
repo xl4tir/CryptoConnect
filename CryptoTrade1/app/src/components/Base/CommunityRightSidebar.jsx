@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { FiInfo } from "react-icons/fi";
 import { getRecentUsers } from '../../services/userProfileService';
 import { getUserProfilePhotoURL } from '../../services/userProfileService';
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
 
-const CommunityRightSidebar = ({user_id}) => {
+const CommunityRightSidebar = ({ user_id }) => {
     const [recentUsers, setRecentUsers] = useState([]);
 
     useEffect(() => {
@@ -12,8 +12,10 @@ const CommunityRightSidebar = ({user_id}) => {
         const fetchRecentUsers = async () => {
             try {
                 const users = await getRecentUsers();
+                console.log(users)
                 const filteredUsers = users.filter(user => user._id !== user_id);
-                setRecentUsers(filteredUsers.slice(-4));
+                setRecentUsers(filteredUsers)
+               
             } catch (error) {
                 console.error('Помилка отримання останніх користувачів:', error);
             }
@@ -62,11 +64,13 @@ const CommunityRightSidebar = ({user_id}) => {
                     </p>
 
                     <div className='flex flex-col gap-2 mt-3'>
-                        <p className='flex-row flex items-center gap-2 text-white text-sm font-semibold'>
-                            <label className="text-white/70 w-4" htmlFor="">1</label>
-                            <label htmlFor="">$OM</label>
-                            <label className="text-white/70 font-medium" htmlFor="">MANTRA</label>
-                        </p>
+                        <Link to={`/coin-info/mantra`}>
+                            <p className='flex-row flex items-center gap-2 text-white text-sm font-semibold'>
+                                <label className="text-white/70 w-4" htmlFor="">1</label>
+                                <label htmlFor="">$OM</label>
+                                <label className="text-white/70 font-medium" htmlFor="" >MANTRA</label>
+                            </p>
+                        </Link>
                         <p className='flex-row flex items-center  gap-2 text-white text-sm font-semibold'>
                             <label className="text-white/70 w-4" htmlFor="">2</label>
                             <label htmlFor="">$TURBO</label>
@@ -98,25 +102,25 @@ const CommunityRightSidebar = ({user_id}) => {
 
                     <div className='flex flex-col gap-5 mt-3'>
 
-                        {recentUsers.map(user => (
-                            <Link to={`/profile/${user._id}`}> 
-                            <div key={user._id} className="flex-row flex items-center gap-4 text-white text-sm font-semibold">
-                                <div className="flex flex-row w-full">
-                                    <img
-                                        src={getUserProfilePhotoURL(user.profilePhoto)}
-                                        alt={`${user.username}'s profile`}
-                                        className="flex-shrink-0 w-9 h-9 rounded-full mr-2"
-                                    />
-                                    <div className="flex w-full flex-col">
-                                        <div className="flex w-full flex-col flex-start">
-                                            <p className="text-white text-md font-semibold">
-                                                {user.name.length > 15 ? `${user.name.slice(0, 15)}...` : user.name}
-                                            </p>
-                                            <p className='font-semibold text-xs text-gray-300'>@{user.username}</p>
+                    {recentUsers.slice(0, 4).map(user => (
+                            <Link to={`/profile/${user._id}` } >
+                                <div key={user._id} className="flex-row flex items-center gap-4 text-white text-sm font-semibold">
+                                    <div className="flex flex-row w-full">
+                                        <img
+                                            src={getUserProfilePhotoURL(user.profilePhoto)}
+                                            alt={`${user.username}'s profile`}
+                                            className="flex-shrink-0 w-9 h-9 rounded-full mr-2"
+                                        />
+                                        <div className="flex w-full flex-col">
+                                            <div className="flex w-full flex-col flex-start">
+                                                <p className="text-white text-md font-semibold">
+                                                    {user.name.length > 15 ? `${user.name.slice(0, 15)}...` : user.name}
+                                                </p>
+                                                <p className='font-semibold text-xs text-gray-300'>@{user.username}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                             </Link>
                         ))}
                     </div>

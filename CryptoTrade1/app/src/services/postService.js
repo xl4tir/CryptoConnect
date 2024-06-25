@@ -29,6 +29,17 @@ export const getAllPosts = async () => {
     }
 };
 
+// Отримання постів за символом криптовалюти
+export const getPostsByCryptoSymbol = async (cryptoSymbol) => {
+    try {
+        const response = await api.get(`/posts/crypto/${cryptoSymbol}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching posts by crypto symbol:', error);
+        throw error;
+    }
+};
+
 // Отримання посту за ідентифікатором
 export const getPostById = async (postId) => {
     try {

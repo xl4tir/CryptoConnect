@@ -2,18 +2,14 @@ import PortfolioService from '../services/portfolioService';
 
 export async function assertProcessing(portfolio, coins, setPortfolioTransactions, setPortfolioAssets, setIsLoading) {
     try {
-        // Перевірка наявності портфоліо та даних про монети
         if (portfolio && coins.length > 0) {
             const portfolioId = portfolio._id;
-
-            // Отримання транзакцій з сервера за допомогою сервісу
             const filteredTransactions = await PortfolioService.getPortfolioTransactions(portfolioId);
 
-            // Створюємо об'єкти для збереження кількості та середньої ціни покупки кожної криптовалюти
             const assetMap = {};
-            const avgBuyPriceMap = {};
+            const totalCostMap = {};
+            const totalAmountMap = {};
 
-            // Отримуємо актуальну ціну для кожної криптовалюти з масиву coins
             const currentPrices = {};
             const priceChange_1h = {};
             const priceChange_24h = {};
@@ -25,15 +21,15 @@ export async function assertProcessing(portfolio, coins, setPortfolioTransaction
                 const { cryptocurrency, amount, operation, purchasePrice } = transaction;
                 if (!assetMap[cryptocurrency]) {
                     assetMap[cryptocurrency] = 0;
-                    avgBuyPriceMap[cryptocurrency] = 0;
+                    totalCostMap[cryptocurrency] = 0;
+                    totalAmountMap[cryptocurrency] = 0;
                 }
 
-                if (operation) {
-                    // Покупка
+                if (operation) { // Buy operation
                     assetMap[cryptocurrency] += amount;
-                    avgBuyPriceMap[cryptocurrency] += amount * purchasePrice;
-                } else {
-                    // Продаж
+                    totalCostMap[cryptocurrency] += amount * purchasePrice;
+                    totalAmountMap[cryptocurrency] += amount;
+                } else { // Sell operation
                     assetMap[cryptocurrency] -= amount;
                 }
 
@@ -49,29 +45,32 @@ export async function assertProcessing(portfolio, coins, setPortfolioTransaction
                 }
             });
 
-            // Обчислюємо середню ціну покупки для кожної криптовалюти
-            Object.keys(avgBuyPriceMap).forEach((cryptocurrency) => {
-                const totalAmount = assetMap[cryptocurrency];
-                avgBuyPriceMap[cryptocurrency] /= totalAmount;
+            const assets = Object.keys(assetMap).map((cryptocurrency) => {
+                const holdings = assetMap[cryptocurrency];
+                const totalCost = totalCostMap[cryptocurrency];
+                const totalAmount = totalAmountMap[cryptocurrency];
+                const avgBuyPrice = totalAmount > 0 ? (totalCost / totalAmount).toFixed(2) : 0;
+                const price = currentPrices[cryptocurrency];
+                const holdingsUSD = (price * holdings).toFixed(2);
+                const profit = (price - avgBuyPrice) * holdings;
+                const profitPercentage = avgBuyPrice > 0 ? ((price - avgBuyPrice) / avgBuyPrice * 100).toFixed(2) : 0;
+
+                return {
+                    cryptocurrency,
+                    holdings,
+                    avgBuyPrice,
+                    price,
+                    holdingsUSD,
+                    priceChange_1h: priceChange_1h[cryptocurrency],
+                    priceChange_24h: priceChange_24h[cryptocurrency],
+                    priceChange_7d: priceChange_7d[cryptocurrency],
+                    symbol: symbol[cryptocurrency],
+                    image: image[cryptocurrency],
+                    profit: profit.toFixed(2),
+                    profitPercentage,
+                };
             });
 
-            // Створюємо список активів з інформацією про криптовалюти, кількість та середню ціну покупки
-            const assets = Object.keys(assetMap).map((cryptocurrency) => ({
-                cryptocurrency,
-                holdings: assetMap[cryptocurrency],
-                avgBuyPrice: (avgBuyPriceMap[cryptocurrency]).toFixed(2),
-                price: currentPrices[cryptocurrency],
-                holdingsUSD: (currentPrices[cryptocurrency] * assetMap[cryptocurrency]).toFixed(2),
-                priceChange_1h: priceChange_1h[cryptocurrency],
-                priceChange_24h: priceChange_24h[cryptocurrency],
-                priceChange_7d: priceChange_7d[cryptocurrency],
-                symbol: symbol[cryptocurrency],
-                image: image[cryptocurrency],
-                profit: ((currentPrices[cryptocurrency] - avgBuyPriceMap[cryptocurrency]) * assetMap[cryptocurrency]).toFixed(2),
-                profitPercentage: ((currentPrices[cryptocurrency] - avgBuyPriceMap[cryptocurrency]) / avgBuyPriceMap[cryptocurrency] * 100).toFixed(2)
-            }));
-
-            // Оновлюємо стан портфоліо та активів
             setPortfolioTransactions(filteredTransactions);
             setPortfolioAssets(assets);
         }

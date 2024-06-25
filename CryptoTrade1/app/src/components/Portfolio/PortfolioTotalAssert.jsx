@@ -1,31 +1,24 @@
 
-
-const PortfolioTotalAssert = ({  portfolioAssets }) => {
-
-
-
-
-
+const PortfolioTotalAssert = ({ portfolioAssets, onCoinClick }) => {
     return (
         <div className="">
             <h1 className='font-semibold pt-5 text-lg'>Assets</h1>
-            <table style={{ width: '900px' }} class="table-auto w-full mt-8 text-right">
+            <table style={{ width: '900px' }} className="table-auto w-full mt-8 text-right">
                 <thead>
-
                     <tr className="text-xs text-sm border-y border-y-gray-600 h-10">
                         <th className="text-left">Name</th>
                         <th>Price</th>
                         <th>1h%</th>
                         <th>24h%</th>
-                        <th>7d</th>
+                        <th>7d%</th>
                         <th>Holdings</th>
                         <th>Avg. Buy Price</th>
                         <th>Profit/Loss</th>
                     </tr>
                 </thead>
-                <tbody className="">
+                <tbody>
                     {portfolioAssets.map((asset, index) => (
-                        <tr key={index} className="text-sm border-y border-y-gray-600 h-16">
+                        <tr key={index} className="text-sm border-y border-y-gray-600 h-16 cursor-pointer hover:bg-white/5" onClick={() => onCoinClick(asset)}>
                             <td className="text-left font-semibold">
                                 <div className="flex items-center">
                                     <img className="w-6" src={asset.image} alt='crypto' /><p className="m-2">{asset.cryptocurrency} </p><label className="text-gray-500">{asset.symbol}</label>
@@ -113,7 +106,7 @@ const PortfolioTotalAssert = ({  portfolioAssets }) => {
                             <td>
                                 <div className="flex flex-col font-medium">
                                     <p>${asset.holdingsUSD}</p>
-                                    <p className="text-gray-400  text-xs">{asset.holdings} {asset.symbol}</p>
+                                    <p className="text-gray-400  text-xs">{asset.holdings.toFixed(2)} {asset.symbol}</p>
                                 </div>
                             </td>
                             <td className="font-medium">${asset.avgBuyPrice}</td>

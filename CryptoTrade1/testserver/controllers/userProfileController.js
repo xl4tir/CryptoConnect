@@ -106,13 +106,19 @@ const userProfileController = {
   },
   getRecentUsers: async (req, res) => {
     try {
-      const recentUsers = await UserProfile.find().sort({ registrationDate: -1 }).limit(10);
+      const authenticatedUserId = req.session.userId; // or wherever you store the user ID
+
+      const recentUsers = await UserProfile.find({ _id: { $ne: authenticatedUserId } })
+        .sort({ registrationDate: -1 })
+        .limit(10);
+
       res.json(recentUsers);
     } catch (error) {
       console.error('Помилка отримання останніх користувачів:', error);
       res.status(500).json({ message: 'Внутрішня помилка сервера' });
     }
   }
+
 
 };
 
